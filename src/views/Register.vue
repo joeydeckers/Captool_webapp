@@ -3,7 +3,7 @@
     <b-container>
         <b-row>
             <b-col lg="6" class="mx-auto">
-                <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+               
                     <b-form-group
                     id="input-group-1"
                     label="Email address:"
@@ -12,20 +12,27 @@
                     >
                     <b-form-input
                         id="input-1"
-                        v-model="form.email"
+                        v-model="email"
                         type="email"
                         required
                         placeholder="Enter email"
                     ></b-form-input>
+                    <b-form-input
+                        id="input-1"
+                        v-model="name"
+                        type="text"
+                        required
+                        placeholder="Enter name"
+                    ></b-form-input>
                     </b-form-group>
 
                     <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
-                    <b-form-input id="input-2" v-model="form.name" required placeholder="Password"></b-form-input>
+                    <b-form-input id="input-2" v-model="password" required placeholder="Password"></b-form-input>
                     </b-form-group>
 
 
-                    <b-button type="submit" variant="primary">Submit</b-button>
-                </b-form>
+                    <button @click="registerUser" type="submit" variant="primary">Submit</button>
+               
             </b-col>
         </b-row>
     </b-container>
@@ -33,35 +40,25 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";  
+
 export default {
+  
   data() {
     return {
-      form: {
-        email: "",
-        name: "",
-        food: null,
-        checked: []
-      },
-      show: true
+      email: "",
+      name: "",
+      password: ""
     };
   },
   methods: {
-    onSubmit(evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.form));
-    },
-    onReset(evt) {
-      evt.preventDefault();
-      // Reset our form values
-      this.form.email = "";
-      this.form.name = "";
-      this.form.food = null;
-      this.form.checked = [];
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      });
+    ...mapActions(["register"]),
+    registerUser(){
+      this.register({
+        email: this.email,
+        name: this.name,
+        password: this.password
+      })
     }
   }
 };

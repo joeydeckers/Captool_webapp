@@ -1,5 +1,5 @@
 import axios from 'axios'
-import router from './../../router'
+//import router from './../../router'
 
 const state = {
     access_token: ''
@@ -13,9 +13,17 @@ const getters = {
 
 const actions = {
     login({commit}, user){
-        axios.post('', {
-            email: user.email,
-            password: user.password
+        axios({
+            method: 'post',
+            url: 'https://i430817core.venus.fhict.nl/api/Users',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            data:{
+                email: user.email,
+                password: user.password
+            }
         })
         .then((response)=>{
             commit('SET_USER_TOKEN', response.data)
@@ -25,7 +33,11 @@ const actions = {
         })
     },
     register({commit}, user){
-        axios.post('', {
+        axios.post('https://i430817core.venus.fhict.nl/api/Users/PostUser', {
+            headers:{
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
             email: user.email,
             password: user.password
         })

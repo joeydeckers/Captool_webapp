@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
+import Dashboard from '../views/Dashboard.vue'
+import CaptionItem from '../views/CaptionItem.vue'
+import EditCaptionItem from '../views/EditCaptionItem.vue'
 
 
 Vue.use(VueRouter)
@@ -22,6 +25,21 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/home',
+    name: 'Dashboard',
+    component: Dashboard
+  },
+  {
+    path: '/caption/:id',
+    name: 'CaptionItem',
+    component: CaptionItem
+  },
+  {
+    path: 'edit/caption/:id',
+    name: 'EditCaptionItem',
+    component: EditCaptionItem
   },
   {
     path: '/about',

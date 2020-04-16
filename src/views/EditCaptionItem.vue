@@ -33,6 +33,8 @@
 <script>
 import "vue-range-component/dist/vue-range-slider.css";
 import VueRangeSlider from "vue-range-component";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -40,15 +42,22 @@ export default {
       max: ""
     };
   },
-  components: {
-    VueRangeSlider
+    methods: {
+    ...mapActions(["fetchVideo"]),
+  },
+  computed: {
+    ...mapGetters(["video"])
   },
   created() {
+    this.fetchVideo("MeBQjS1i");
     setTimeout(() => {
       this.value.push(Math.floor(this.video.playlist[0].duration));
       this.max = Math.floor(this.video.playlist[0].duration);
     }, 500);
-  }
+  },
+  components: {
+    VueRangeSlider
+  },
 };
 </script>
 

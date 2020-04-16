@@ -9,7 +9,7 @@
             <strong>{{ video.title }}</strong>
           </p>
           <p>: {{ getTime(video.duration) }}</p>
-          <router-link :to="{name: 'Video', params: {id: video.mediaid}}">
+          <router-link :to="{name: 'CaptionItem', params: {id: video.mediaid}}">
             <eye-icon size="1.5x" class="icon"></eye-icon>
           </router-link>
           <router-link :to="{name: 'EditCaptionItem', params: {id: video.mediaid}}">

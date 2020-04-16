@@ -2,18 +2,17 @@
   <b-container fluid>
     <h2>Mijn captions</h2>
     <b-row>
-      <b-col lg="3">
+      <b-col lg="3" v-for="video in allVideos.playlist" :key="video.mediaid">
         <div class="video-item">
-          <!-- v-for="video in allVideos" :key="video.playlist[0].mediaid" -->
-          <img :src="video.playlist[0].image" alt srcset />
+          <img :src="video.image" alt srcset>
           <p>
             <strong>{{ video.title }}</strong>
           </p>
-          <p>{{ getTime(video.playlist[0].duration) }}</p>
-          <router-link :to="{name: 'Video', params: {id: video.playlist[0].mediaid}}">
+          <p>: {{ getTime(video.duration) }}</p>
+          <router-link :to="{name: 'Video', params: {id: video.mediaid}}">
             <eye-icon size="1.5x" class="icon"></eye-icon>
           </router-link>
-          <router-link :to="{name: 'EditCaptionItem', params: {id: video.playlist[0].mediaid}}">
+          <router-link :to="{name: 'EditCaptionItem', params: {id: video.mediaid}}">
             <edit-icon size="1.5x" class="icon"></edit-icon>
           </router-link>
         </div>
@@ -31,8 +30,7 @@ export default {
     return {};
   },
   methods: {
-    //...mapActions(["fetchVideos"]),
-    ...mapActions(["fetchVideo"]),
+    ...mapActions(["fetchVideos"]),
     getTime(time) {
       var min = Math.floor(time / 60);
       var sec = time % 60;
@@ -40,16 +38,14 @@ export default {
     }
   },
   computed: {
-    //...mapGetters(["allVideos"])
-    ...mapGetters(["video"])
+    ...mapGetters(["allVideos"])
   },
   components: {
     EditIcon,
     EyeIcon
   },
   created() {
-    //this.fetchVideos();
-    this.fetchVideo("MeBQjS1i");
+    this.fetchVideos();
   }
 };
 </script>

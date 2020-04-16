@@ -4,16 +4,16 @@
       <b-row>
         <b-col lg="3">
           <div class="video-item">
-            <p>{{ video.title }}</p>
+            <h2>{{ video.title }}</h2>
             <iframe
-              :src="video.playlist[0].link"
+              :src="video.link"
               :title="video.title"
               frameborder="0"
               allowfullscreen
             ></iframe>
           </div>
         </b-col>
-        <b-col lg="6">
+        <!-- <b-col lg="6">
           <b-input placeholder="Jouw caption"></b-input>
           <vue-range-slider
             :bg-style="bgStyle"
@@ -23,7 +23,7 @@
             :max="max"
           ></vue-range-slider>
           <button>Save</button>
-        </b-col>
+        </b-col> -->
         <b-col lg="3"></b-col>
       </b-row>
     </b-container>
@@ -31,15 +31,15 @@
 </template>
 
 <script>
-import "vue-range-component/dist/vue-range-slider.css";
-import VueRangeSlider from "vue-range-component";
+// import "vue-range-component/dist/vue-range-slider.css";
+// import VueRangeSlider from "vue-range-component";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
     return {
-      value: [0],
-      max: ""
+      // value: [0],
+      // max: ""
     };
   },
     methods: {
@@ -49,15 +49,15 @@ export default {
     ...mapGetters(["video"])
   },
   created() {
-    this.fetchVideo("MeBQjS1i");
-    setTimeout(() => {
-      this.value.push(Math.floor(this.video.playlist[0].duration));
-      this.max = Math.floor(this.video.playlist[0].duration);
-    }, 500);
+    this.fetchVideo(this.$route.params.id);
+    // setTimeout(() => {
+    //   this.value.push(Math.floor(this.video.playlist[0].duration));
+    //   this.max = Math.floor(this.video.playlist[0].duration);
+    // }, 1000);
   },
-  components: {
-    VueRangeSlider
-  },
+  // components: {
+  //   VueRangeSlider
+  // },
 };
 </script>
 

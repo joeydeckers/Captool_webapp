@@ -17,10 +17,9 @@ const getters = {
 const actions = {
     fetchVideos({ commit }) {
         axios
-            .get("https://cdn.jwplayer.com/v2/playlists/pcNG01c7", {
+            .get("https://cdn.jwplayer.com/v2/playlists/pcNG01c7", { // todo: remove hardcoded playlist id
             })
             .then(response => {
-                console.log(response.data);
                 commit('SET_ALL_VIDEOS', response.data)
             })
             .catch(error => {
@@ -32,7 +31,7 @@ const actions = {
             .get("https://cdn.jwplayer.com/v2/media/" + media_id, {
             })
             .then(response => {
-                commit('SET_VIDEO', response.data)
+                commit('SET_VIDEO', response.data.playlist[0]) // todo: find out why a media item has a playlist
             })
             .catch(error => {
                 alert(error);

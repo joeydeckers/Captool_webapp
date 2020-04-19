@@ -7,7 +7,6 @@ import Dashboard from '../views/Dashboard.vue'
 import CaptionItem from '../views/CaptionItem.vue'
 import EditCaptionItem from '../views/EditCaptionItem.vue'
 
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -37,7 +36,7 @@ const routes = [
     component: CaptionItem
   },
   {
-    path: 'edit/caption/:id',
+    path: '/edit/caption/:id',
     name: 'EditCaptionItem',
     component: EditCaptionItem
   },

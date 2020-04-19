@@ -39,7 +39,8 @@ const actions = {
                 "Accept": "application/json",
             },
             email: user.email,
-            password: user.password
+            password: user.password,
+            name: user.name
         })
         .then((response)=>{
             commit('SET_USER_TOKEN', response.data)

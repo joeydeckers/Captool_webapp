@@ -46,19 +46,28 @@ export default {
   },
     methods: {
     ...mapActions(["fetchVideo"]),
+    createVideo(){
+       this.fetchVideo(this.$route.params.id);
+      setTimeout(() => {
+        let video = document.getElementById('video');
+        this.value.push(Math.floor(video.duration));
+        this.max = Math.floor(video.duration);
+        console.log(Math.floor(video.duration));
+      }, 1000);
+    }
   },
   computed: {
     ...mapGetters(["video"])
   },
   created() {
-    this.fetchVideo(this.$route.params.id);
-    setTimeout(() => {
-       let video = document.getElementById('video');
-       this.value.push(Math.floor(video.duration));
-       this.max = Math.floor(video.duration);
-       console.log(Math.floor(video.duration));
-    }, 1000);
+    this.createVideo();
   },
+  watch:{
+    /* eslint-disable no-unused-vars */
+    $route(to, from){
+        this.createVideo();
+    }
+  }, 
   components: {
     VueRangeSlider
   },

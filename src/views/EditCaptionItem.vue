@@ -5,6 +5,7 @@
         <b-col lg="3">
           <div class="video-item">
             <h2>{{ video.title }}</h2>
+           
             <!-- <iframe
               :src="video.link"
               :title="video.title"
@@ -18,15 +19,23 @@
           </div>
         </b-col>
         <b-col lg="6">
-          <b-input placeholder="Jouw caption"></b-input>
+          <b-input  v-model="text" placeholder="Jouw caption"></b-input>
           <vue-range-slider
            
             v-model="value"
             :max="max"
           ></vue-range-slider>
-          <button>Save</button>
+          <button @click="addSubtitle()">Save caption</button> <button @click="createSrt()">Save SRT</button>
+          <div v-for="subtitle in words" :key="subtitle.id">
+            <p>
+             {{subtitle.start}} - {{subtitle.end}} | <strong>{{ subtitle.text }}</strong>
+            </p>
+          </div>
+          
         </b-col>
-        <b-col lg="3"></b-col>
+       <b-col lg="3" >
+       
+      </b-col>
       </b-row>
     </b-container>
   </div>
@@ -34,14 +43,20 @@
 
 <script>
 import "vue-range-component/dist/vue-range-slider.css";
+//import fs from 'fs';
 import VueRangeSlider from "vue-range-component";
 import { mapGetters, mapActions } from "vuex";
+import subtitlesComposer from './../components/subtitlesComposer.js';
+
+const sampleWords = [];
 
 export default {
   data() {
     return {
       value: [0],
-      max: 0
+      max: 0,
+      words: sampleWords,
+      text: ''
     };
   },
     methods: {
@@ -54,10 +69,21 @@ export default {
         this.max = Math.floor(video.duration);
         console.log(Math.floor(video.duration));
       }, 1000);
+    },
+    createSrt(){
+      const srtData = subtitlesComposer({ words: sampleWords, type: 'srt', numberOfCharPerLine: 35 });
+      console.log(srtData);
+      //fs.writeFileSync('./../../public/'+this.$route.params.id+'.srt', srtData);
+    },
+    addSubtitle(){
+      const id = sampleWords.length + 1;
+      sampleWords.push({id:id, start:this.value[0], end:this.value[1],text:this.text, })
     }
+
   },
   computed: {
-    ...mapGetters(["video"])
+    ...mapGetters(["video"]),
+    
   },
   created() {
     this.createVideo();

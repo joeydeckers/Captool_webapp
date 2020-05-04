@@ -84,6 +84,15 @@ export default {
     createSrt(){
       const srtData = srtGenerator(sampleWords);
       console.log(srtData);
+      const blob = new Blob([srtData], {type: 'text/plain'})
+      const e = document.createEvent('MouseEvents'),
+      a = document.createElement('a');
+      a.download = this.$route.params.id+".srt";
+      a.href = window.URL.createObjectURL(blob);
+      a.dataset.downloadurl = ['text/srt', a.download, a.href].join(':');
+      e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      a.dispatchEvent(e);
+      
       this.srtToJson(srtData);
     },
     srtToJson(data){

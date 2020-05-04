@@ -46,9 +46,29 @@ import "vue-range-component/dist/vue-range-slider.css";
 //import fs from 'fs';
 import VueRangeSlider from "vue-range-component";
 import { mapGetters, mapActions } from "vuex";
-import subtitlesComposer from './../components/subtitlesComposer.js';
 
-const sampleWords = [];
+const sampleWords = [{
+        "id": 0,
+        "start": 13.02,
+        "end": 13.17,
+        "text": "There"
+      },
+      {
+        "id": 1,
+        "start": 13.17,
+        "end": 13.38,
+        "text": "is"
+      },];
+const formatSeconds = seconds => new Date(seconds.toFixed(3) * 1000).toISOString().substr(11, 12);
+
+const srtGenerator = (vttJSON) => {
+  let srtOut = '';
+  vttJSON.forEach((v, i) => {
+    srtOut += `${ i + 1 }\n${ formatSeconds(parseFloat(v.start)).replace('.', ',') } --> ${ formatSeconds(parseFloat(v.end)).replace('.', ',') }\n${ v.text.trim() }\n\n`;
+  });
+
+  return srtOut;
+};
 
 export default {
   data() {
@@ -71,9 +91,9 @@ export default {
       }, 1000);
     },
     createSrt(){
-      const srtData = subtitlesComposer({ words: sampleWords, type: 'srt', numberOfCharPerLine: 35 });
+      const srtData = srtGenerator(sampleWords);
       console.log(srtData);
-      //fs.writeFileSync('./../../public/'+this.$route.params.id+'.srt', srtData);
+
     },
     addSubtitle(){
       const id = sampleWords.length + 1;

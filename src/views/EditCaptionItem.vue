@@ -130,6 +130,7 @@ export default {
               };
           }
       })
+      console.log(output);
        this.setCaptionData({
         id: this.$route.params.id,
         data: output,

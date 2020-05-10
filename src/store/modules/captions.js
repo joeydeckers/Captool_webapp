@@ -13,23 +13,19 @@ const getters = {
 
 const actions = {
     setCaptionData({commit}, caption){
-        axios({
-            method: 'post',
-            url: 'https://i430817core.venus.fhict.nl/api/Captions',
-            headers: {
+        axios.post('https://i346784core.venus.fhict.nl/api/Captions/PostCaption', {
+            headers:{
                 "Content-Type": "application/json",
                 "Accept": "application/json",
             },
-            data:{
-                data: caption.data,
-                id: caption.id
-            }
+            VideoID: caption.id,
+            Data: caption.data
         })
         .then((response)=>{
             commit('SET_CAPTION_DATA', response.data)
         })
         .catch((error) => {
-            alert(error);
+            console.log(error.response);
         })
     }
 };

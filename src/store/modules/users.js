@@ -15,7 +15,7 @@ const actions = {
     login({commit}, user){
         axios({
             method: 'post',
-            url: 'https://i430817core.venus.fhict.nl/api/Users',
+            url: 'https://i346784core.venus.fhict.nl/api/Users',
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
@@ -33,7 +33,7 @@ const actions = {
         })
     },
     register({commit}, user){
-        axios.post('https://i430817core.venus.fhict.nl/api/Users/PostUser', {
+        axios.post('https://i346784core.venus.fhict.nl/api/Users/PostUser', {
             headers:{
                 "Content-Type": "application/json",
                 "Accept": "application/json",

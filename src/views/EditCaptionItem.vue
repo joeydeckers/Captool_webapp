@@ -80,8 +80,8 @@ export default {
     };
   },
     methods: {
-    ...mapActions(["fetchVideo"]),
-    ...mapActions(["setCaptionData"]),
+    ...mapActions(["fetchVideo", "setCaptionData"]),
+    
     createVideo(){
        this.fetchVideo(this.$route.params.id);
       setTimeout(() => {

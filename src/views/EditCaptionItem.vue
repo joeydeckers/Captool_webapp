@@ -130,18 +130,18 @@ export default {
               };
           }
       })
-      console.log(output);
-       this.setCaptionData({
-        id: this.$route.params.id,
-        data: output,
-      })
+      
     },
  
     addSubtitle(){
       const id = sampleWords.length + 1;
       sampleWords.push({id:id, start:this.min, end:this.max,text:this.text, })
       const srtData = srtGenerator(sampleWords);
-      this.srtToJson(srtData);
+      console.log(srtData)
+       this.setCaptionData({
+        id: this.$route.params.id,
+        data: srtData,
+      })
     }
 
   },

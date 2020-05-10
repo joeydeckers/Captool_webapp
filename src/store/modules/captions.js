@@ -22,6 +22,7 @@ const actions = {
             },
             data:{
                 data: caption.data,
+                id: caption.id
             }
         })
         .then((response)=>{

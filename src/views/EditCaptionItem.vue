@@ -81,6 +81,7 @@ export default {
   },
     methods: {
     ...mapActions(["fetchVideo"]),
+    ...mapActions(["setCaptionData"]),
     createVideo(){
        this.fetchVideo(this.$route.params.id);
       setTimeout(() => {
@@ -89,6 +90,7 @@ export default {
         this.max = Math.floor(video.duration);
       }, 1000);
     },
+
     createSrt(){
       const srtData = srtGenerator(sampleWords);
       console.log(srtData);
@@ -128,11 +130,17 @@ export default {
               };
           }
       })
-      console.log(output);
+       this.setCaptionData({
+        id: this.$route.params.id,
+        data: output,
+      })
     },
+ 
     addSubtitle(){
       const id = sampleWords.length + 1;
       sampleWords.push({id:id, start:this.min, end:this.max,text:this.text, })
+      const srtData = srtGenerator(sampleWords);
+      this.srtToJson(srtData);
     }
 
   },

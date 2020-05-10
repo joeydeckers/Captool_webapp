@@ -19,16 +19,24 @@
           </div>
         </b-col>
         <b-col lg="6">
-        
+<!--         
           <vue-range-slider
             v-model="value"
             :max="max"
             :min="min"
-          ></vue-range-slider>
+          ></vue-range-slider> -->
+           <b-row>
+              <b-col lg="6">
+           <b-input  v-model="min" type="number" placeholder="Begin"></b-input>
+            </b-col>
+            <b-col lg="6">
+            <b-input  v-model="max" type="number" placeholder="max"></b-input>
+             </b-col>
+ </b-row>
 
-            <b-input  v-model="text" placeholder="Jouw caption"></b-input>
-          <button @click="addSubtitle()">Save caption</button> <button @click="createSrt()">Save SRT</button>
-          <div v-for="subtitle in words" :key="subtitle.id">
+            <b-input style="margin-top: 20px" v-model="text" placeholder="Jouw caption"></b-input>
+          <button style="margin-top: 20px" @click="addSubtitle()">Save caption</button> <button @click="createSrt()">Save SRT</button>
+          <div style="margin-top: 20px" v-for="subtitle in words" :key="subtitle.id">
             <p>
              {{subtitle.start}} - {{subtitle.end}} | <strong>{{ subtitle.text }}</strong>
             </p>
@@ -44,8 +52,8 @@
 </template>
 
 <script>
-import "vue-range-component/dist/vue-range-slider.css";
-import VueRangeSlider from "vue-range-component";
+// import "vue-range-component/dist/vue-range-slider.css";
+// import VueRangeSlider from "vue-range-component";
 import { mapGetters, mapActions } from "vuex";
 
 const sampleWords = [];
@@ -124,7 +132,7 @@ export default {
     },
     addSubtitle(){
       const id = sampleWords.length + 1;
-      sampleWords.push({id:id, start:this.value[0], end:this.value[1],text:this.text, })
+      sampleWords.push({id:id, start:this.min, end:this.max,text:this.text, })
     }
 
   },
@@ -142,7 +150,7 @@ export default {
     }
   }, 
   components: {
-    VueRangeSlider
+    // VueRangeSlider
   },
 };
 </script>

@@ -122,11 +122,11 @@ export default {
               buffer.end =  secondOne.split(':').reverse().reduce((prev, curr, i) => prev + curr*Math.pow(60, i), 0);
           }
           else if(line !== '')
-              buffer.text.push(line);
+              buffer.content.push(line);
           else {
               output.push(buffer);
               buffer = {
-                  text: []
+                  content: []
               };
           }
       })

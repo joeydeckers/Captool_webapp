@@ -1,38 +1,46 @@
 <template>
   <div id="register">
-    <b-container>
+    <b-container fluid>
         <b-row>
-            <b-col lg="6" class="mx-auto">
-               
+          <b-col lg="6">
+            <img alt="Vue logo" src="../assets/bg.png">
+          </b-col>
+            <b-col lg="6">
+              
+                <b-form @submit="onSubmit" @reset="onReset">
+                    <h3><strong>Inloggen</strong></h3>
+                    <p>Vul jouw gegevens in om in te loggen.</p>
                     <b-form-group
-                    id="input-group-1"
-                    label="Email address:"
-                    label-for="input-1"
-                    description="We'll never share your email with anyone else."
+                      id="input-group-1"                     
                     >
-                    <b-form-input
-                        id="input-1"
-                        v-model="email"
-                        type="email"
-                        required
-                        placeholder="Enter email"
-                    ></b-form-input>
-                    <b-form-input
-                        id="input-1"
-                        v-model="name"
-                        type="text"
-                        required
-                        placeholder="Enter name"
-                    ></b-form-input>
+
+                    <div class="input-holder">
+                      <font-awesome-icon icon="envelope" />
+                      <input type="email" placeholder="Jouw email" v-model="email">
+                    </div>
+                    
+                    </b-form-group>
+                    <b-form-group
+                      id="input-group-1"                     
+                    >
+
+                    <div class="input-holder">
+                      <font-awesome-icon icon="user" />
+                      <input type="name" placeholder="Jouw naam" v-model="name">
+                    </div>
+                    
                     </b-form-group>
 
-                    <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
-                    <b-form-input id="input-2" v-model="password" required placeholder="Password"></b-form-input>
+                    <b-form-group id="input-group-2">
+                    <div class="input-holder">
+                      <font-awesome-icon icon="lock" />
+                      <input type="email" placeholder="Jouw wachtwoord" v-model="password">
+                    </div>
                     </b-form-group>
 
 
-                    <button @click="registerUser" type="submit" variant="primary">Submit</button>
-               
+                     <Button type="submit" buttonText="Registeren"/>
+                </b-form>
             </b-col>
         </b-row>
     </b-container>
@@ -41,9 +49,12 @@
 
 <script>
 import { mapActions } from "vuex";  
+import Button from '@/components/Button.vue'
 
 export default {
-  
+  components: {
+    Button
+  },
   data() {
     return {
       email: "",

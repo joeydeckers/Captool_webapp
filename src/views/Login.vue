@@ -1,30 +1,35 @@
 <template>
   <div id="login">
-    <b-container>
+    <b-container fluid>
         <b-row>
-            <b-col lg="6" class="mx-auto">
-                <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+          <b-col lg="6">
+            <img alt="Vue logo" src="../assets/bg.png">
+          </b-col>
+            <b-col lg="6">
+              
+                <b-form @submit="onSubmit" @reset="onReset">
+                    <h3><strong>Inloggen</strong></h3>
+                    <p>Vul jouw gegevens in om in te loggen.</p>
                     <b-form-group
-                    id="input-group-1"
-                    label="Email address:"
-                    label-for="input-1"
-                    description="We'll never share your email with anyone else."
+                      id="input-group-1"                     
                     >
-                    <b-form-input
-                        id="input-1"
-                        v-model="form.email"
-                        type="email"
-                        required
-                        placeholder="Enter email"
-                    ></b-form-input>
+
+                    <div class="input-holder">
+                      <font-awesome-icon icon="envelope" />
+                      <input type="email" placeholder="Jouw email" v-model="email">
+                    </div>
+                    
                     </b-form-group>
 
-                    <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
-                    <b-form-input id="input-2" v-model="form.name" required placeholder="Password"></b-form-input>
+                    <b-form-group id="input-group-2">
+                    <div class="input-holder">
+                      <font-awesome-icon icon="lock" />
+                      <input type="email" placeholder="Jouw email" v-model="password">
+                    </div>
                     </b-form-group>
 
 
-                    <b-button type="submit" variant="primary">Submit</b-button>
+                     <Button type="submit" buttonText="Inloggen"/>
                 </b-form>
             </b-col>
         </b-row>
@@ -33,16 +38,16 @@
 </template>
 
 <script>
+import Button from '@/components/Button.vue'
+
 export default {
+  components: {
+    Button
+  },
   data() {
     return {
-      form: {
-        email: "",
-        name: "",
-        food: null,
-        checked: []
-      },
-      show: true
+      email: '',
+      password: ''
     };
   },
   methods: {

@@ -27,7 +27,22 @@ const actions = {
         .catch((error) => {
             console.log(error.response);
         })
-    }
+    },
+    getCaptionData({ commit }, caption) {
+        axios.get('https://i346784core.venus.fhict.nl/api/Captions/GetCaption', {
+            headers:{
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            VideoID: caption.id,
+        })
+        .then(response => {
+            commit('SET_CAPTION_DATA', response.data)
+        })
+        .catch(error => {
+            alert(error);
+        });
+    },
 };
 
 const mutations = {

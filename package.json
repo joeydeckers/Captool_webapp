@@ -14,10 +14,12 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.9.0",
     "core-js": "^3.6.4",
+    "plyr": "^3.6.2",
     "sbd": "^1.0.18",
     "vue": "^2.6.11",
     "vue-feather-icons": "^5.0.0",
     "vue-histogram-slider": "^0.3.4",
+    "vue-plyr": "^6.0.4",
     "vue-range-component": "^1.0.3",
     "vue-router": "^3.1.5",
     "vuex": "^3.1.2"

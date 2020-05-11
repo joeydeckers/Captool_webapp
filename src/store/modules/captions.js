@@ -6,7 +6,7 @@ const state = {
 };
 
 const getters = {
-    getCaptionData: (state) => {
+    captionData: (state) => {
         return state.caption_data;
     }
 };
@@ -28,13 +28,12 @@ const actions = {
             console.log(error.response);
         })
     },
-    getCaptionData({ commit }, caption) {
-        axios.get('https://i346784core.venus.fhict.nl/api/Captions/GetCaption', {
+    getCaptionData({ commit }, videoId) {
+        axios.get('https://i346784core.venus.fhict.nl/api/Captions/GetCaption/' + videoId, {
             headers:{
                 "Content-Type": "application/json",
                 "Accept": "application/json",
             },
-            VideoID: caption.id,
         })
         .then(response => {
             commit('SET_CAPTION_DATA', response.data)

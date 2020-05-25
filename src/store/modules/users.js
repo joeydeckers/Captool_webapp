@@ -1,5 +1,5 @@
 import axios from 'axios'
-//import router from './../../router'
+import router from './../../router'
 
 const state = {
     token: '' || localStorage.getItem('capToolToken')
@@ -28,6 +28,9 @@ const actions = {
         .then((response)=>{
             commit('SET_USER_TOKEN', response.data.token);
             localStorage.setItem('capToolToken', response.data.token);
+            setTimeout(() => {
+                router.push({name: 'Dashboard'});
+            }, 500);
         })
         .catch((error) => {
             alert(error);

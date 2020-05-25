@@ -2,12 +2,12 @@ import axios from 'axios'
 //import router from './../../router'
 
 const state = {
-    access_token: ''
+    token: '' || localStorage.getItem('capToolToken')
 };
 
 const getters = {
     getAccesToken: (state) => {
-        return state.access_token;
+        return state.token;
     }
 };
 
@@ -26,7 +26,8 @@ const actions = {
             }
         })
         .then((response)=>{
-            commit('SET_USER_TOKEN', response.data)
+            commit('SET_USER_TOKEN', response.data.token);
+            localStorage.setItem('capToolToken', response.data.token);
         })
         .catch((error) => {
             alert(error);
@@ -53,7 +54,7 @@ const actions = {
 
 const mutations = {
     SET_USER_TOKEN(state, token){
-        state.access_token = token;
+        state.token = token;
     }
 };
 

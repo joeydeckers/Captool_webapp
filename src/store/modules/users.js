@@ -15,7 +15,7 @@ const actions = {
     login({commit}, user){
         axios({
             method: 'post',
-            url: 'https://i346784core.venus.fhict.nl/api/Users',
+            url: 'https://i346784core.venus.fhict.nl/api/Users/Login',
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",

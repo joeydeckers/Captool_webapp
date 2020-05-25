@@ -7,7 +7,7 @@
           </b-col>
             <b-col lg="6">
               
-                <b-form @submit="onSubmit" @reset="onReset">
+                <b-form @submit.prevent="registerUser" @reset="onReset">
                     <h3><strong>Inloggen</strong></h3>
                     <p>Vul jouw gegevens in om in te loggen.</p>
                     <b-form-group
@@ -34,7 +34,7 @@
                     <b-form-group id="input-group-2">
                     <div class="input-holder">
                       <font-awesome-icon icon="lock" />
-                      <input type="email" placeholder="Jouw wachtwoord" v-model="password">
+                      <input type="password" placeholder="Jouw wachtwoord" v-model="password">
                     </div>
                     </b-form-group>
 

@@ -7,7 +7,7 @@
           </b-col>
             <b-col lg="6">
               
-                <b-form @submit="onSubmit" @reset="onReset">
+                <b-form @submit.prevent="login">
                     <h3><strong>Inloggen</strong></h3>
                     <p>Vul jouw gegevens in om in te loggen.</p>
                     <b-form-group
@@ -24,7 +24,7 @@
                     <b-form-group id="input-group-2">
                     <div class="input-holder">
                       <font-awesome-icon icon="lock" />
-                      <input type="email" placeholder="Jouw email" v-model="password">
+                      <input type="password" placeholder="Jouw wachtwoord" v-model="password">
                     </div>
                     </b-form-group>
 
@@ -51,23 +51,9 @@ export default {
     };
   },
   methods: {
-    onSubmit(evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.form));
+    login() {
+      this.$store.dispatch('login', {email: this.email, password: this.password})
     },
-    onReset(evt) {
-      evt.preventDefault();
-      // Reset our form values
-      this.form.email = "";
-      this.form.name = "";
-      this.form.food = null;
-      this.form.checked = [];
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      });
-    }
   }
 };
 </script>

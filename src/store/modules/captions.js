@@ -13,7 +13,7 @@ const getters = {
 
 const actions = {
     setCaptionData({commit}, caption){
-        axios.post('https://i346784core.venus.fhict.nl/api/Captions/PostCaption', {
+        axios.post('api/Captions/PostCaption', {
             headers:{
                 "Content-Type": "application/json",
                 "Accept": "application/json",
@@ -29,7 +29,7 @@ const actions = {
         })
     },
     getCaptionData({ commit }, videoId) {
-        axios.get('https://i346784core.venus.fhict.nl/api/Captions/GetCaption/' + videoId, {
+        axios.get('api/Captions/GetCaption/' + videoId, {
             headers:{
                 "Content-Type": "application/json",
                 "Accept": "application/json",

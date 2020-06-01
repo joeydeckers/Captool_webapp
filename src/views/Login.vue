@@ -16,7 +16,7 @@
 
                     <div class="input-holder">
                       <font-awesome-icon icon="envelope" />
-                      <input type="email" placeholder="Jouw email" v-model="email">
+                      <input type="email" placeholder="Jouw email" v-model="email" data-type="email">
                     </div>
                     
                     </b-form-group>
@@ -24,7 +24,7 @@
                     <b-form-group id="input-group-2">
                     <div class="input-holder">
                       <font-awesome-icon icon="lock" />
-                      <input type="password" placeholder="Jouw wachtwoord" v-model="password">
+                      <input type="password" placeholder="Jouw wachtwoord" v-model="password" data-type="password">
                     </div>
                     </b-form-group>
 

@@ -2,9 +2,9 @@
   <b-container fluid>
     <h2>Mijn captions</h2>
     <b-row>
-      <b-col lg="3" v-for="video in allVideos.playlist" :key="video.mediaid">
+      <b-col lg="3" v-for="video in this.$store.getters.allVideos.playlist" :key="video.mediaid">
         <div class="video-item">
-          <img :src="video.image" alt srcset>
+          <img :src="video.image" alt srcset />
           <p>
             <strong>{{ video.title }}</strong>
           </p>
@@ -26,9 +26,6 @@ import { mapGetters, mapActions } from "vuex";
 import { EditIcon, EyeIcon } from "vue-feather-icons";
 
 export default {
-  data() {
-    return {};
-  },
   methods: {
     ...mapActions(["fetchVideos"]),
     getTime(time) {
@@ -45,7 +42,10 @@ export default {
     EyeIcon
   },
   created() {
-    this.fetchVideos();
+    this.$store.dispatch("fetchUser", this.$store.getters.getAccessToken);
+    setTimeout(() => {
+    this.$store.dispatch("fetchVideos", this.$store.getters.getUser.playlist);
+    }, 500);
   }
 };
 </script>

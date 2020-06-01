@@ -6,6 +6,7 @@ import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
 import CaptionItem from '../views/CaptionItem.vue'
 import EditCaptionItem from '../views/EditCaptionItem.vue'
+import Profile from '../views/Profile.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/edit/caption/:id',
     name: 'EditCaptionItem',
     component: EditCaptionItem
+  },
+  {
+    path: '/Profile',
+    name: 'profile',
+    component: Profile
   },
   {
     path: '/about',

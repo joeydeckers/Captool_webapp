@@ -6,7 +6,7 @@ const state = {
 };
 
 const getters = {
-    getAccesToken: (state) => {
+    getAccessToken: (state) => {
         return state.token;
     }
 };
@@ -29,7 +29,7 @@ const actions = {
             commit('SET_USER_TOKEN', response.data.token);
             localStorage.setItem('capToolToken', response.data.token);
             setTimeout(() => {
-                router.push({name: 'Dashboard'});
+                router.push("/profile");
             }, 500);
         })
         .catch((error) => {

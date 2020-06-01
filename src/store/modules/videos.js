@@ -15,15 +15,17 @@ const getters = {
 };
 
 const actions = {
-    fetchVideos({ commit }) {
+    fetchVideos({ commit }, playlist) {
+        console.log("from store " + playlist);
         axios
-            .get("https://cdn.jwplayer.com/v2/playlists/5TREJ3F2", { // todo: remove hardcoded playlist id
+            .get("https://cdn.jwplayer.com/v2/playlists/" + playlist, { //5TREJ3F2", { // todo: remove hardcoded playlist id
             })
             .then(response => {
                 commit('SET_ALL_VIDEOS', response.data)
+                console.log(response.data);
             })
             .catch(error => {
-                alert(error);
+                console.log(error);
             });
     },
     fetchVideo({ commit }, media_id) {
@@ -31,10 +33,10 @@ const actions = {
             .get("https://cdn.jwplayer.com/v2/media/" + media_id, {
             })
             .then(response => {
-                commit('SET_VIDEO', response.data.playlist[0]) // todo: find out why a media item has a playlist
+                commit('SET_VIDEO', response.data.playlist[0])
             })
             .catch(error => {
-                alert(error);
+                console.log(error);
             });
     },
 };

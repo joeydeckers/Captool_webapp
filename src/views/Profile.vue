@@ -19,8 +19,8 @@
                 Name:
                 <b-form-input v-model="name.input" :placeholder="user.name" v-if="name.change"></b-form-input>
                 <span v-else class="font-weight-bold">{{ user.name }}</span>
-                <b-button @click="name.change = !name.change" v-if="!name.change">Edit</b-button>
-                <b-button
+                <b-button class="btn" @click="name.change = !name.change" v-if="!name.change">Edit</b-button>
+                <b-button class="btn"
                   @click="name.change = !name.change, user.name = name.input"
                   v-if="name.change"
                 >Save</b-button>
@@ -29,8 +29,8 @@
                 Email:
                 <b-form-input v-model="email.input" :placeholder="user.email" v-if="email.change"></b-form-input>
                 <span v-else class="font-weight-bold">{{ user.email }}</span>
-                <b-button @click="email.change = !email.change" v-if="!email.change">Edit</b-button>
-                <b-button
+                <b-button class="btn" @click="email.change = !email.change" v-if="!email.change">Edit</b-button>
+                <b-button class="btn"
                   @click="email.change = !email.change, user.email = email.input"
                   v-if="email.change"
                 >Save</b-button>
@@ -43,8 +43,8 @@
                   v-if="playlist.change"
                 ></b-form-input>
                 <span v-else class="font-weight-bold">{{ user.playlist }}</span>
-                <b-button @click="playlist.change = !playlist.change" v-if="!playlist.change">Edit</b-button>
-                <b-button
+                <b-button class="btn" @click="playlist.change = !playlist.change" v-if="!playlist.change">Edit</b-button>
+                <b-button class="btn"
                   @click="playlist.change = !playlist.change, user.playlist = playlist.input"
                   v-if="playlist.change"
                 >Save</b-button>
@@ -52,13 +52,13 @@
               <b-list-group-item>
                 Password:
                 <b-form-input
+                type="password"
                   v-model="password.input"
-                  :placeholder="user.password"
                   v-if="password.change"
                 ></b-form-input>
-                <span v-else class="font-weight-bold">{{ user.password }}</span>
-                <b-button @click="password.change = !password.change" v-if="!password.change">Edit</b-button>
-                <b-button
+                <span v-else class="font-weight-bold">not visible</span>
+                <b-button class="btn" @click="password.change = !password.change" v-if="!password.change">Edit</b-button>
+                <b-button class="btn"
                   @click="password.change = !password.change, user.password = password.input"
                   v-if="password.change"
                 >Save</b-button>
@@ -93,31 +93,19 @@ export default {
         input: "",
         change: ""
       },
-      tests: [
-        {
-          name: "Name",
-          input: "",
-          change: false,
-          value: this.$store.getters.getUser.name
-        },
-        {
-          name: "Email",
-          input: "",
-          change: false,
-          value: this.$store.getters.getUser.email
-        },
-        {
-          name: "Playlist",
-          input: "",
-          change: false,
-          value: this.$store.getters.getUser.playlist
-        }
-      ]
     };
   },
   methods: {
+    getUser() {
+      return {
+        name: this.name.input === "" ? this.user.name : this.name.input,
+        email: this.email.input === "" ? this.user.email : this.email.input,
+        playlist: this.playlist.input === "" ? this.user.playlist : this.playlist.input,
+        password: this.password.input === "" ? this.user.password : this.password.input,
+      }
+    },
     saveSettings() {
-      console.log('save');
+      this.$store.dispatch("updateUser", {access_token: this.$store.getters.getAccessToken, user: this.getUser()});
     },
   },
   created() {
@@ -130,4 +118,7 @@ export default {
 </script>
 
 <style scoped>
+  .btn {
+    float: right;
+  }
 </style>

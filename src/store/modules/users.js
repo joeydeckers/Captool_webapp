@@ -52,6 +52,11 @@ const actions = {
         .catch((error) => {
             alert(error);
         })
+    },
+    logout({commit}){
+        localStorage.clear();
+        router.push('/login');
+        commit('SET_USER_TOKEN', '');
     }
 };
 

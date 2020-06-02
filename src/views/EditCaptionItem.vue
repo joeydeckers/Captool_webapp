@@ -5,10 +5,15 @@
         <b-col lg="3">
           <div class="video-item">
             <h2>{{ video.title }}</h2>
-                  <!-- src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" -->
+            <!-- src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" -->
 
             <vue-plyr>
-              <video id="video" crossorigin playsinline :src="video.sources[1].file">
+              <video
+                id="video"
+                crossorigin
+                playsinline
+                :src="video.sources[1].file"
+              >
                 <track
                   default
                   kind="captions"
@@ -24,7 +29,11 @@
           <b-row>
             <b-col lg="6">
               <p>Begin</p>
-              <b-input v-model="min" type="number" placeholder="Begin"></b-input>
+              <b-input
+                v-model="min"
+                type="number"
+                placeholder="Begin"
+              ></b-input>
             </b-col>
             <b-col lg="6">
               <p>Einde</p>
@@ -32,13 +41,29 @@
             </b-col>
           </b-row>
 
-          <b-input style="margin-top: 20px" v-model="text" placeholder="Jouw caption"></b-input>
-          <Button style="margin-top: 20px; margin-right:20px;" buttonText="Toevoegen" @click.native="addSubtitle()"></Button>
-          <Button style="margin-top: 20px" buttonText="Exporteren" @click.native="createVTT()"></Button>
-          <Button><font-awesome-icon icon="plus" style="color:#fff;"/></Button>
-          <div style="margin-top: 20px" v-for="subtitle in words" :key="subtitle.id">
+          <b-input
+            style="margin-top: 20px"
+            v-model="text"
+            placeholder="Jouw caption"
+          ></b-input>
+          <Button
+            style="margin-top: 20px; margin-right:20px;"
+            buttonText="Toevoegen"
+            @click.native="addSubtitle()"
+          ></Button>
+          <Button
+            style="margin-top: 20px"
+            buttonText="Exporteren"
+            @click.native="createVTT()"
+          ></Button>
+          <!-- <Button><font-awesome-icon icon="plus" style="color:#fff;"/></Button> -->
+          <div
+            style="margin-top: 20px"
+            v-for="subtitle in words"
+            :key="subtitle.id"
+          >
             <p>
-              {{subtitle.start}} - {{subtitle.end}} |
+              {{ subtitle.start }} - {{ subtitle.end }} |
               <strong>{{ subtitle.text }}</strong>
             </p>
           </div>
@@ -56,10 +81,10 @@ import { mapGetters, mapActions } from "vuex";
 import Button from "@/components/Button.vue";
 
 const sampleWords = [];
-const formatSeconds = seconds =>
+const formatSeconds = (seconds) =>
   new Date(seconds.toFixed(3) * 1000).toISOString().substr(11, 12);
 
-const vttGenerator = vttJSON => {
+const vttGenerator = (vttJSON) => {
   let vttOut = "";
   vttJSON.forEach((v, i) => {
     vttOut += `${i + 1}\n${formatSeconds(parseFloat(v.start)).replace(
@@ -81,20 +106,29 @@ export default {
       min: 1,
       words: sampleWords,
       text: "",
-      vtt: ''
+      vtt: "",
     };
   },
   methods: {
-    ...mapActions(["fetchVideo", "setCaptionData", "getCaptionData"]),
+    ...mapActions([
+      "fetchVideo",
+      "setCaptionData",
+      "getCaptionData",
+      "getCaption",
+    ]),
 
     createVideo() {
       this.fetchVideo(this.$route.params.id);
       this.getCaptionData(this.$route.params.id);
+      this.getCaption(
+        this.$route.params.id,
+        this.$store.getters.getAccessToken
+      );
       setTimeout(() => {
         let video = document.getElementById("video");
         this.value.push(Math.floor(video.duration));
         this.max = Math.floor(video.duration);
-        this.vttToJson(this.captionData);
+        // this.vttToJson(this.captionData);
       }, 1000);
     },
 
@@ -103,7 +137,7 @@ export default {
       console.log(vttData);
       const blob = new Blob([vttData], { type: "text/plain" });
       const e = document.createEvent("MouseEvents"),
-      a = document.createElement("a");
+        a = document.createElement("a");
       a.download = this.$route.params.id + ".vtt";
       a.href = window.URL.createObjectURL(blob);
       a.dataset.downloadurl = ["text/vtt", a.download, a.href].join(":");
@@ -129,7 +163,7 @@ export default {
     vttToJson(data) {
       var lines = data.split("\n");
       var buffer = {
-        text: ""
+        text: "",
       };
 
       lines.forEach(function(line) {
@@ -154,23 +188,25 @@ export default {
     },
 
     addSubtitle() {
-      const id = sampleWords.length + 1;
-      sampleWords.push({
-        id: id,
-        start: this.min,
-        end: this.max,
-        text: this.text
-      });
-      const vttData = vttGenerator(sampleWords);
-      console.log(vttData);
-      this.setCaptionData({
-        id: this.$route.params.id,
-        data: vttData
-      });
-    }
+      if (this.max != "" && this.min != "" && this.text != "") {
+        const id = sampleWords.length + 1;
+        sampleWords.push({
+          id: id,
+          start: this.min,
+          end: this.max,
+          text: this.text,
+        });
+        const vttData = vttGenerator(sampleWords);
+        console.log(vttData);
+        this.setCaptionData({
+          id: this.$route.params.id,
+          data: vttData,
+        });
+      }
+    },
   },
   computed: {
-    ...mapGetters(["video", "captionData"])
+    ...mapGetters(["video", "captionData"]),
   },
   created() {
     this.createVideo();
@@ -179,12 +215,12 @@ export default {
     /* eslint-disable no-unused-vars */
     $route(to, from) {
       this.createVideo();
-    }
+    },
   },
   components: {
     // VueRangeSlider
     VuePlyr,
-    Button
-  }
+    Button,
+  },
 };
 </script>

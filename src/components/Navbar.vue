@@ -12,6 +12,7 @@
             <b-nav-item v-if="!this.$store.getters.getAccessToken" href="/login">Login</b-nav-item>
             <b-nav-item v-if="!this.$store.getters.getAccessToken" href="/register">Sign up</b-nav-item>
             <b-nav-item v-if="this.$store.getters.getAccessToken" href="/home">Dashboard</b-nav-item>
+            <b-nav-item v-if="this.$store.getters.getAccessToken" href="/profile">Profile</b-nav-item>
             <b-nav-item v-if="this.$store.getters.getAccessToken" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>
         </b-collapse>

@@ -42,7 +42,7 @@ const routes = [
     component: EditCaptionItem
   },
   {
-    path: '/Profile',
+    path: '/profile',
     name: 'profile',
     component: Profile
   },

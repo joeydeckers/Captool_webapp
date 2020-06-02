@@ -5,6 +5,7 @@
         <b-col lg="3">
           <div class="video-item">
             <h2>{{ video.title }}</h2>
+                  <!-- src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" -->
 
             <vue-plyr>
               <video id="video" crossorigin playsinline :src="video.sources[1].file">
@@ -12,7 +13,7 @@
                   default
                   kind="captions"
                   label="English"
-                  src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
+                  :src="vtt"
                   srclang="en"
                 />
               </video>
@@ -79,7 +80,8 @@ export default {
       max: 0,
       min: 1,
       words: sampleWords,
-      text: ""
+      text: "",
+      vtt: ''
     };
   },
   methods: {
@@ -101,7 +103,7 @@ export default {
       console.log(vttData);
       const blob = new Blob([vttData], { type: "text/plain" });
       const e = document.createEvent("MouseEvents"),
-        a = document.createElement("a");
+      a = document.createElement("a");
       a.download = this.$route.params.id + ".vtt";
       a.href = window.URL.createObjectURL(blob);
       a.dataset.downloadurl = ["text/vtt", a.download, a.href].join(":");

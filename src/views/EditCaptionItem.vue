@@ -11,7 +11,7 @@
       <video
         crossorigin
         playsinline
-        poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"
+       
         :src="video.sources[1].file"
       >
        
@@ -27,7 +27,7 @@
 
           </div>
         </b-col>
-        <b-col lg="6">
+        <b-col lg="6" style="margin-top: 45px" >
 <!--         
           <vue-range-slider
             v-model="value"
@@ -44,7 +44,7 @@
  </b-row>
 
             <b-input style="margin-top: 20px" v-model="text" placeholder="Jouw caption"></b-input>
-          <button style="margin-top: 20px" @click="addSubtitle()">Save caption</button> <button @click="createVTT()">Save VTT</button>
+          <Button style="margin-top: 20px" buttonText="Toevoegen" @click="addSubtitle()"></Button> <Button  style="margin-top: 20px" buttonText="Exporteren" @click="createVTT()"></Button>
           <div style="margin-top: 20px" v-for="subtitle in words" :key="subtitle.id">
             <p>
              {{subtitle.start}} - {{subtitle.end}} | <strong>{{ subtitle.text }}</strong>
@@ -65,6 +65,7 @@
 // import VueRangeSlider from "vue-range-component";
 import VuePlyr from 'vue-plyr'
 import { mapGetters, mapActions } from "vuex";
+import Button from '@/components/Button.vue';
 
 const sampleWords = [];
 const formatSeconds = seconds => new Date(seconds.toFixed(3) * 1000).toISOString().substr(11, 12);
@@ -166,7 +167,8 @@ export default {
   }, 
   components: {
     // VueRangeSlider
-    VuePlyr
+    VuePlyr,
+    Button
   },
 };
 </script>

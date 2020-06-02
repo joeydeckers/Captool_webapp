@@ -38,9 +38,6 @@ const actions = {
         .then(response => {
             commit('SET_CAPTION_DATA', response.data)
         })
-        .catch(error => {
-            alert(error);
-        });
     },
 };
 

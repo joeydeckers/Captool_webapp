@@ -44,7 +44,7 @@
  </b-row>
 
             <b-input style="margin-top: 20px" v-model="text" placeholder="Jouw caption"></b-input>
-          <button style="margin-top: 20px" @click="addSubtitle()">Save caption</button> <button @click="createSrt()">Save SRT</button>
+          <button style="margin-top: 20px" @click="addSubtitle()">Save caption</button> <button @click="createVTT()">Save VTT</button>
           <div style="margin-top: 20px" v-for="subtitle in words" :key="subtitle.id">
             <p>
              {{subtitle.start}} - {{subtitle.end}} | <strong>{{ subtitle.text }}</strong>
@@ -70,12 +70,12 @@ const sampleWords = [];
 const formatSeconds = seconds => new Date(seconds.toFixed(3) * 1000).toISOString().substr(11, 12);
 
 
-const srtGenerator = (vttJSON) => {
-  let srtOut = '';
+const vttGenerator = (vttJSON) => {
+  let vttOut = '';
   vttJSON.forEach((v, i) => {
-    srtOut += `${ i + 1 }\n${ formatSeconds(parseFloat(v.start)).replace('.', ',') } --> ${ formatSeconds(parseFloat(v.end)).replace('.', ',') }\n${ v.text.trim() }\n\n`;
+    vttOut += `${ i + 1 }\n${ formatSeconds(parseFloat(v.start)).replace('.', ',') } --> ${ formatSeconds(parseFloat(v.end)).replace('.', ',') }\n${ v.text.trim() }\n\n`;
   });
-  return srtOut;
+  return vttOut;
 };
 
 export default {
@@ -98,25 +98,24 @@ export default {
         let video = document.getElementById('video');
         this.value.push(Math.floor(video.duration));
         this.max = Math.floor(video.duration);
-        this.srtToJson(this.captionData);
+        this.vttToJson(this.captionData);
       }, 1000);
     },
 
-    createSrt(){
-      const srtData = srtGenerator(sampleWords);
-      console.log(srtData);
-      const blob = new Blob([srtData], {type: 'text/plain'})
+    createVTT(){
+      const vttData = vttGenerator(sampleWords);
+      console.log(vttData);
+      const blob = new Blob([vttData], {type: 'text/plain'})
       const e = document.createEvent('MouseEvents'),
       a = document.createElement('a');
-      a.download = this.$route.params.id+".srt";
+      a.download = this.$route.params.id+".vtt";
       a.href = window.URL.createObjectURL(blob);
-      a.dataset.downloadurl = ['text/srt', a.download, a.href].join(':');
+      a.dataset.downloadurl = ['text/vtt', a.download, a.href].join(':');
       e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
       a.dispatchEvent(e);
       
-      // this.srtToJson(srtData);
     },
-    srtToJson(data){
+    vttToJson(data){
       var lines = data.split('\n');
       var buffer = {
           text: ''
@@ -143,11 +142,11 @@ export default {
     addSubtitle(){
       const id = sampleWords.length + 1;
       sampleWords.push({id:id, start:this.min, end:this.max,text:this.text, })
-      const srtData = srtGenerator(sampleWords);
-      console.log(srtData)
+      const vttData = vttGenerator(sampleWords);
+      console.log(vttData)
        this.setCaptionData({
         id: this.$route.params.id,
-        data: srtData,
+        data: vttData,
       })
     }
 

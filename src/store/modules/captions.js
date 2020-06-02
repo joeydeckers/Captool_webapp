@@ -50,7 +50,6 @@ const actions = {
             },
         })
         .then(response => {
-            console.log(response.data);
             commit('SET_CAPTION', response.data)
         })
     },

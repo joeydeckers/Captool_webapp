@@ -120,14 +120,16 @@ export default {
     createVideo() {
       this.fetchVideo(this.$route.params.id);
       this.getCaptionData(this.$route.params.id);
-      this.getCaption(
-        this.$route.params.id,
-        this.$store.getters.getAccessToken
-      );
+     
       setTimeout(() => {
+        console.log(this.$store.getters.getAccessToken)
         let video = document.getElementById("video");
         this.value.push(Math.floor(video.duration));
         this.max = Math.floor(video.duration);
+        this.vtt =  this.getCaption(
+        this.$route.params.id,
+        this.$store.getters.getAccessToken
+      );
         // this.vttToJson(this.captionData);
       }, 1000);
     },

@@ -64,16 +64,23 @@
             @click.native="createVTT()"
           ></Button>
           <!-- <Button><font-awesome-icon icon="plus" style="color:#fff;"/></Button> -->
-          <div
-            style="margin-top: 20px"
-            v-for="subtitle in words"
-            :key="subtitle.id"
-          >
-            <p>
-              {{ subtitle.start }} - {{ subtitle.end }} |
-              <strong>{{ subtitle.text }}</strong>
-            </p>
-          </div>
+          <draggable v-model="myArray" @end="dragFunction()">
+            <transition-group>
+              <div
+                style="margin-top: 10px;
+    border: 0.5px solid black;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px;"
+                v-for="subtitle in words"
+                :key="subtitle.id"
+              >
+                <strong>#{{ subtitle.id }}</strong> {{ subtitle.start }} -
+                {{ subtitle.end }} |
+                <strong>{{ subtitle.text }}</strong>
+              </div>
+            </transition-group>
+          </draggable>
         </b-col>
       </b-row>
     </b-container>
@@ -86,6 +93,7 @@
 import VuePlyr from "vue-plyr";
 import { mapGetters, mapActions } from "vuex";
 import Button from "@/components/Button.vue";
+import draggable from "vuedraggable";
 
 const sampleWords = [];
 const formatSeconds = (seconds) =>
@@ -134,7 +142,6 @@ export default {
         this.getCaptionData(this.$route.params.id);
 
         setTimeout(() => {
-         
           this.vtt =
             "https://i346784core.venus.fhict.nl/StaticFiles/" +
             this.$route.params.id +
@@ -215,6 +222,15 @@ export default {
         });
       }
     },
+    dragFunction() {
+        const vttData = vttGenerator(sampleWords);
+        console.log(vttData);
+        this.setCaptionData({
+          id: this.$route.params.id,
+          data: vttData,
+        });
+     
+    },
   },
   computed: {
     ...mapGetters(["video", "captionData"]),
@@ -232,6 +248,7 @@ export default {
     // VueRangeSlider
     VuePlyr,
     Button,
+    draggable,
   },
 };
 </script>

@@ -17,10 +17,17 @@
                 <track
                   default
                   kind="captions"
-                  label="English"
+                  label="Current"
                   :src="vtt"
                   srclang="en"
                 />
+                <!-- <track
+          default
+          kind="captions"
+          label="English"
+          src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
+          srclang="en"
+        > -->
               </video>
             </vue-plyr>
           </div>
@@ -89,10 +96,10 @@ const vttGenerator = (vttJSON) => {
   vttJSON.forEach((v, i) => {
     vttOut += `${i + 1}\n${formatSeconds(parseFloat(v.start)).replace(
       ".",
-      ","
+      "."
     )} --> ${formatSeconds(parseFloat(v.end)).replace(
       ".",
-      ","
+      "."
     )}\n${v.text.trim()}\n\n`;
   });
   return vttOut;
@@ -119,18 +126,20 @@ export default {
 
     createVideo() {
       this.fetchVideo(this.$route.params.id);
-      this.getCaptionData(this.$route.params.id);
-     
+
       setTimeout(() => {
-        console.log(this.$store.getters.getAccessToken)
         let video = document.getElementById("video");
         this.value.push(Math.floor(video.duration));
         this.max = Math.floor(video.duration);
-        this.vtt =  this.getCaption(
-        this.$route.params.id,
-        this.$store.getters.getAccessToken
-      );
-        // this.vttToJson(this.captionData);
+        this.getCaptionData(this.$route.params.id);
+
+        setTimeout(() => {
+         
+          this.vtt =
+            "https://i346784core.venus.fhict.nl/StaticFiles/" +
+            this.$route.params.id +
+            ".vtt";
+        }, 1000);
       }, 1000);
     },
 
@@ -172,8 +181,8 @@ export default {
         if (!buffer.id) buffer.id = line;
         else if (!buffer.start) {
           var range = line.split(" --> ");
-          const firstOne = range[0].replace(",000", "");
-          const secondOne = range[1].replace(",000", "");
+          const firstOne = range[0].replace(".000", "");
+          const secondOne = range[1].replace(".000", "");
           buffer.start = firstOne
             .split(":")
             .reverse()

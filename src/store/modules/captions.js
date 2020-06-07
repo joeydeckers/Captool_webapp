@@ -2,16 +2,12 @@ import axios from 'axios'
 //import router from './../../router'
 
 const state = {
-    caption_data: '',
-    caption: ''
+    caption_data: ''
 };
 
 const getters = {
     captionData: (state) => {
         return state.caption_data;
-    },
-    captionVTT: (state) => {
-        return state.caption;
     }
 };
 
@@ -33,34 +29,24 @@ const actions = {
         })
     },
     getCaptionData({ commit }, videoId) {
-        axios.get('api/Captions/GetCaption/' + videoId, {
-            headers:{
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            },
-        })
-        .then(response => {
-            commit('SET_CAPTION_DATA', response.data)
-        })
-    },
-    getCaption({ commit }, videoId, access_token) {
-        axios.get('api/Captions/' + videoId, {
+        axios({
+            method: 'get',
+            url: 'api/Captions/' + videoId,
             headers: {
-                Authorization: "Bearer " + access_token,
+                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEyIiwibmJmIjoxNTkxMzcwMjk0LCJleHAiOjE1OTE5NzUwOTQsImlhdCI6MTU5MTM3MDI5NH0.P5e3ERONFv-qkwqi7gBVVpzwE4n8FOD78LeyaB24rKM",
             },
         })
-        .then(response => {
-            commit('SET_CAPTION', response.data)
-        })
+            .then((response) => {
+                console.log(response.data)
+                commit('SET_CAPTION_DATA', response.data)
+            })
     },
+    
 };
 
 const mutations = {
     SET_CAPTION_DATA(state, data){
         state.caption_data = data;
-    },
-    SET_CAPTION(state, data){
-        state.caption = data;
     }
 };
 

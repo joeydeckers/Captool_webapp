@@ -33,7 +33,7 @@ const actions = {
             method: 'get',
             url: 'api/Captions/' + videoId,
             headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEyIiwibmJmIjoxNTkxMzcwMjk0LCJleHAiOjE1OTE5NzUwOTQsImlhdCI6MTU5MTM3MDI5NH0.P5e3ERONFv-qkwqi7gBVVpzwE4n8FOD78LeyaB24rKM",
+                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEzIiwibmJmIjoxNTkxNTU3MzQ2LCJleHAiOjE1OTIxNjIxNDYsImlhdCI6MTU5MTU1NzM0Nn0.18_GfijGAJK7VGSTVZZWWi0vqwIxKKjTBwg7nOX7rCM",
             },
         })
             .then((response) => {

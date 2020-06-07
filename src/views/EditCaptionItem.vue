@@ -8,15 +8,26 @@
             <!-- src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" -->
 
             <vue-plyr>
-              <video id="video" crossorigin playsinline :src="video.sources[1].file">
-                <track default kind="captions" label="Current" :src="vtt" srclang="en" />
+              <video
+                id="video"
+                crossorigin
+                playsinline
+                :src="video.sources[1].file"
+              >
+                <track
+                  default
+                  kind="captions"
+                  label="Current"
+                  :src="vtt"
+                  srclang="en"
+                />
                 <!-- <track
           default
           kind="captions"
           label="English"
           src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
           srclang="en"
-                >-->
+        > -->
               </video>
             </vue-plyr>
           </div>
@@ -25,7 +36,11 @@
           <b-row>
             <b-col lg="6">
               <p>Begin</p>
-              <b-input v-model="min" type="number" placeholder="Begin"></b-input>
+              <b-input
+                v-model="min"
+                type="number"
+                placeholder="Begin"
+              ></b-input>
             </b-col>
             <b-col lg="6">
               <p>Einde</p>
@@ -33,30 +48,49 @@
             </b-col>
           </b-row>
 
-          <b-input style="margin-top: 20px" v-model="text" placeholder="Jouw caption"></b-input>
+          <b-input
+            style="margin-top: 20px"
+            v-model="text"
+            maxlength="30"
+            placeholder="Jouw caption"
+          ></b-input>
           <Button
             style="margin-top: 20px; margin-right:20px;"
             buttonText="Toevoegen"
             @click.native="addSubtitle()"
           ></Button>
-          <Button style="margin-top: 20px" buttonText="Exporteren" @click.native="createVTT()"></Button>
-          <!-- <Button><font-awesomeme-icon icon="plus" style="color:#fff;"/></Button> -->
-          <draggable v-model="words" @end="dragFunction()">
-            <transition-group>
-              <div
-                style="margin-top: 10px;
-                  border: 0.5px solid black;
-                  border-radius: 5px;
-                  margin-bottom: 10px;
-                  padding: 10px;"
-                v-for="subtitle in words"
-                :key="subtitle.id"
+          <Button
+            style="margin-top: 20px"
+            buttonText="Exporteren"
+            @click.native="createVTT()"
+          ></Button>
+          <!-- <Button><font-awesome-icon icon="plus" style="color:#fff;"/></Button> -->
+
+          <draggable
+            class="list-group topper"
+            tag="ul"
+            v-model="words"
+            v-bind="dragOptions"
+            @change="onChange"
+            :move="onMove"
+            @start="isDragging = true"
+            @end="isDragging = false"
+          >
+            <transition-group type="transition" :name="'flip-list'">
+              <li
+                class="list-group-item"
+                v-for="element in words"
+                :key="element.id"
               >
-                <strong>#{{ subtitle.id }}</strong>
-                {{ subtitle.start }} -
-                {{ subtitle.end }} |
-                <strong>{{ subtitle.text }}</strong>
-              </div>
+                <!-- <span class="badge">{{ element.id }}</span> -->
+                {{ element.start }} - {{ element.end }} |
+                <strong>{{ element.text }}</strong>
+                <Button
+                  style="display: block;float: right; background: red !important; padding: 3px !important; padding-right:8px !important; padding-left:8px !important; margin-top:-3px !important; "
+                  buttonText="Delete"
+                  @click.native="deleteItem(element)"
+                ></Button>
+              </li>
             </transition-group>
           </draggable>
         </b-col>
@@ -74,10 +108,10 @@ import Button from "@/components/Button.vue";
 import draggable from "vuedraggable";
 
 const sampleWords = [];
-const formatSeconds = seconds =>
+const formatSeconds = (seconds) =>
   new Date(seconds.toFixed(3) * 1000).toISOString().substr(11, 12);
 
-const vttGenerator = vttJSON => {
+const vttGenerator = (vttJSON) => {
   let vttOut = "";
   vttJSON.forEach((v, i) => {
     vttOut += `${i + 1}\n${formatSeconds(parseFloat(v.start)).replace(
@@ -99,20 +133,99 @@ export default {
       min: 1,
       words: sampleWords,
       text: "",
-      vtt: ""
+      vtt: "",
+      editable: true,
+      isDragging: false,
+      delayedDragging: false,
     };
   },
   methods: {
+    orderList() {
+      this.list = this.list.sort((one, two) => {
+        return one.order - two.order;
+      });
+    },
+    onMove({ relatedContext, draggedContext }) {
+      const relatedElement = relatedContext.element;
+      const draggedElement = draggedContext.element;
+      return (
+        (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+      );
+    },
+    deleteItem(itemIndex) {
+      console.log(itemIndex);
+      this.sampleWords = this.removeItemOnce(sampleWords, itemIndex);
+      this.words = this.removeItemOnce(sampleWords, itemIndex);
+      this.reorderArray(sampleWords);
+      const vttData = vttGenerator(this.words);
+      console.log(vttData);
+      this.setCaptionData({
+        id: this.$route.params.id,
+        data: vttData,
+      });
+    },
+    removeItemOnce(arr, value) {
+      var i = 0;
+      while (i < arr.length) {
+        if (arr[i] === value) {
+          arr.splice(i, 1);
+        } else {
+          ++i;
+        }
+      }
+      return arr;
+    },
+    onChange(data) {
+
+      this.words = this.array_move(data.moved, sampleWords);
+      this.reorderArray(this.words);
+      this.sampleWords = this.array_move(data.moved, sampleWords);
+      this.reorderArray(sampleWords);
+      const vttData = vttGenerator(this.words);
+      console.log(vttData);
+      this.setCaptionData({
+        id: this.$route.params.id,
+        data: vttData,
+      });
+    },
+    array_move(event, originalArray) {
+      const movedItem = originalArray.find(
+        (item, index) => index === event.oldIndex
+      );
+      const remainingItems = originalArray.filter(
+        (item, index) => index !== event.oldIndex
+      );
+
+      const reorderedItems = [
+        ...remainingItems.slice(0, event.newIndex),
+        movedItem,
+        ...remainingItems.slice(event.newIndex),
+      ];
+
+      return reorderedItems;
+    },
+    reorderArray(arr) {
+      arr.forEach((item, n) => {
+        let sampleObj = {
+          id: n + 1,
+          start: item.start,
+          end: item.end,
+          text: item.text,
+          fixed: false,
+        };
+        arr[n] = sampleObj;
+      });
+    },
     ...mapActions([
       "fetchVideo",
       "setCaptionData",
       "getCaptionData",
-      "getCaption"
+      "getCaption",
     ]),
 
     createVideo() {
       this.fetchVideo(this.$route.params.id);
-
+  console.log(this.$store.getters.getAccessToken)
       setTimeout(() => {
         let video = document.getElementById("video");
         this.value.push(Math.floor(video.duration));
@@ -159,7 +272,7 @@ export default {
     vttToJson(data) {
       var lines = data.split("\n");
       var buffer = {
-        text: ""
+        text: "",
       };
 
       lines.forEach(function(line) {
@@ -190,27 +303,35 @@ export default {
           id: id,
           start: this.min,
           end: this.max,
-          text: this.text
+          text: this.text,
+          fixed: false,
         });
         const vttData = vttGenerator(sampleWords);
         console.log(vttData);
         this.setCaptionData({
           id: this.$route.params.id,
-          data: vttData
+          data: vttData,
         });
+        this.words = sampleWords;
       }
     },
-    dragFunction() {
-      const vttData = vttGenerator(sampleWords);
-      console.log(vttData);
-      this.setCaptionData({
-        id: this.$route.params.id,
-        data: vttData
-      });
-    }
   },
   computed: {
-    ...mapGetters(["video", "captionData"])
+    dragOptions() {
+      return {
+        animation: 0,
+        group: "description",
+        disabled: !this.editable,
+        ghostClass: "ghost",
+      };
+    },
+    listString() {
+      return JSON.stringify(this.list, null, 2);
+    },
+    list2String() {
+      return JSON.stringify(this.list2, null, 2);
+    },
+    ...mapGetters(["video", "captionData"]),
   },
   created() {
     this.createVideo();
@@ -219,13 +340,47 @@ export default {
     /* eslint-disable no-unused-vars */
     $route(to, from) {
       this.createVideo();
-    }
+    },
+    isDragging(newValue) {
+      if (newValue) {
+        this.delayedDragging = true;
+        return;
+      }
+      this.$nextTick(() => {
+        this.delayedDragging = false;
+      });
+    },
   },
   components: {
     // VueRangeSlider
     VuePlyr,
     Button,
-    draggable
-  }
+    draggable,
+  },
 };
 </script>
+
+<style>
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+.list-group {
+  min-height: 20px;
+}
+.list-group-item {
+  cursor: move;
+}
+.list-group-item i {
+  cursor: pointer;
+}
+.topper {
+  margin-top: 30px;
+}
+</style>

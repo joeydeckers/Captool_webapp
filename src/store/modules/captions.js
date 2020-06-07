@@ -29,19 +29,19 @@ const actions = {
         })
     },
     getCaptionData({ commit }, videoId) {
-        axios.get('api/Captions/GetCaption/' + videoId, {
-            headers:{
-                "Content-Type": "application/json",
-                "Accept": "application/json",
+        axios({
+            method: 'get',
+            url: 'api/Captions/' + videoId,
+            headers: {
+                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEyIiwibmJmIjoxNTkxMzcwMjk0LCJleHAiOjE1OTE5NzUwOTQsImlhdCI6MTU5MTM3MDI5NH0.P5e3ERONFv-qkwqi7gBVVpzwE4n8FOD78LeyaB24rKM",
             },
         })
-        .then(response => {
-            commit('SET_CAPTION_DATA', response.data)
-        })
-        .catch(error => {
-            alert(error);
-        });
+            .then((response) => {
+                console.log(response.data)
+                commit('SET_CAPTION_DATA', response.data)
+            })
     },
+    
 };
 
 const mutations = {

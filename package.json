@@ -23,7 +23,7 @@
     "sbd": "^1.0.18",
     "vue": "^2.6.11",
     "vue-feather-icons": "^5.0.0",
-    "vue-histogram-slider": "^0.3.4",
+    "vue-histogram-slider": "^0.3.7",
     "vue-plyr": "^6.0.4",
     "vue-range-component": "^1.0.3",
     "vue-router": "^3.1.5",

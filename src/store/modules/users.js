@@ -29,7 +29,7 @@ const actions = {
             commit('SET_USER_TOKEN', response.data.token);
             localStorage.setItem('capToolToken', response.data.token);
             setTimeout(() => {
-                router.push("/profile");
+                router.push("/home");
             }, 500);
         })
         .catch((error) => {
@@ -52,6 +52,11 @@ const actions = {
         .catch((error) => {
             alert(error);
         })
+    },
+    logout({commit}){
+        localStorage.clear();
+        router.push('/login');
+        commit('SET_USER_TOKEN', '');
     }
 };
 

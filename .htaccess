@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+   AddType text/vtt .vtt
+</IfModule>
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

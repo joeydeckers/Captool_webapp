@@ -2,7 +2,7 @@
   <b-container>
     <b-row>
       <b-col>
-        <b-card header="Profile settings">
+        <b-card header="Profiel instellingen">
           <b-form  @submit.prevent="saveSettings">
             <b-list-group>
               <!-- <b-list-group-item v-for="test in tests" :key="test.name">
@@ -16,7 +16,7 @@
               >Save</b-button>
               </b-list-group-item>-->
               <b-list-group-item>
-                Name:
+                Naam:
                 <b-form-input v-model="name.input" :placeholder="user.name" v-if="name.change"></b-form-input>
                 <span v-else class="font-weight-bold">{{ user.name }}</span>
                 <b-button class="btn" @click="name.change = !name.change" v-if="!name.change">Edit</b-button>
@@ -36,7 +36,7 @@
                 >Save</b-button>
               </b-list-group-item>
               <b-list-group-item>
-                Playlist:
+                Afspeellijst:
                 <b-form-input
                   v-model="playlist.input"
                   :placeholder="user.playlist"
@@ -50,13 +50,13 @@
                 >Save</b-button>
               </b-list-group-item>
               <b-list-group-item>
-                Password:
+                Wachtwoord:
                 <b-form-input
                 type="password"
                   v-model="password.input"
                   v-if="password.change"
                 ></b-form-input>
-                <span v-else class="font-weight-bold">not visible</span>
+                <span v-else class="font-weight-bold">*************</span>
                 <b-button class="btn" @click="password.change = !password.change" v-if="!password.change">Edit</b-button>
                 <b-button class="btn"
                   @click="password.change = !password.change, user.password = password.input"

@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
-    <h2>Mijn captions</h2>
-    <b-row>
+    <h2 v-if="this.$store.getters.allVideos.playlist">Mijn captions</h2>
+    <b-row v-if="this.$store.getters.allVideos.playlist">
       <b-col lg="3" v-for="video in this.$store.getters.allVideos.playlist" :key="video.mediaid">
         <div class="video-item">
           <img :src="video.image" alt srcset />
@@ -16,6 +16,11 @@
             <edit-icon size="1.5x" class="icon"></edit-icon>
           </router-link>
         </div>
+      </b-col>
+    </b-row>
+    <b-row v-else>
+      <b-col>
+        <h3 style="text-align: center;">Voeg een afspeellijst toe van JWPlayer</h3>
       </b-col>
     </b-row>
   </b-container>
@@ -42,10 +47,15 @@ export default {
     EyeIcon
   },
   created() {
-    this.$store.dispatch("fetchUser", this.$store.getters.getAccessToken);
-    setTimeout(() => {
-    this.$store.dispatch("fetchVideos", this.$store.getters.getUser.playlist);
-    }, 500);
+    if (localStorage.capToolToken) {
+      this.$store.dispatch("fetchUser", this.$store.getters.getAccessToken);
+      setTimeout(() => {
+        this.$store.dispatch(
+          "fetchVideos",
+          this.$store.getters.getUser.playlist
+        );
+      }, 500);
+    }
   }
 };
 </script>

@@ -17,7 +17,7 @@ const getters = {
 const actions = {
     fetchVideos({ commit }, playlist) {
         axios
-            .get("https://cdn.jwplayer.com/v2/playlists/" + playlist, { //5TREJ3F2", { // todo: remove hardcoded playlist id
+            .get("https://cdn.jwplayer.com/v2/playlists/" + playlist, {
             })
             .then(response => {
                 commit('SET_ALL_VIDEOS', response.data)

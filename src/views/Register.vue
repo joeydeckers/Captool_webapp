@@ -69,7 +69,7 @@ export default {
         email: this.email,
         name: this.name,
         password: this.password
-      })
+      });
     }
   }
 };

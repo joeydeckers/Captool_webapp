@@ -13,13 +13,18 @@ const getters = {
 
 const actions = {
     setCaptionData({commit}, caption){
-        axios.post('api/Captions/PostCaption', {
-            headers:{
+        axios({
+            method: 'post',
+            url: 'api/Captions/PostCaption',
+            headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
+                Authorization: "Bearer " + localStorage.capToolToken,
             },
-            VideoID: caption.id,
-            Data: caption.data
+            data: {
+                VideoID: caption.id,
+                Caption: caption.data
+            }
         })
         .then((response)=>{
             commit('SET_CAPTION_DATA', response.data)
@@ -29,11 +34,12 @@ const actions = {
         })
     },
     getCaptionData({ commit }, videoId) {
+
         axios({
             method: 'get',
             url: 'api/Captions/' + videoId,
             headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEyIiwibmJmIjoxNTkxMzcwMjk0LCJleHAiOjE1OTE5NzUwOTQsImlhdCI6MTU5MTM3MDI5NH0.P5e3ERONFv-qkwqi7gBVVpzwE4n8FOD78LeyaB24rKM",
+                "Authorization": "Bearer " + localStorage.capToolToken,
             },
         })
             .then((response) => {

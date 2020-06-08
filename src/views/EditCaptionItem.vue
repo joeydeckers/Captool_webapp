@@ -51,6 +51,7 @@
           <b-input
             style="margin-top: 20px"
             v-model="text"
+            maxlength="30"
             placeholder="Jouw caption"
           ></b-input>
           <Button
@@ -64,16 +65,34 @@
             @click.native="createVTT()"
           ></Button>
           <!-- <Button><font-awesome-icon icon="plus" style="color:#fff;"/></Button> -->
-          <div
-            style="margin-top: 20px"
-            v-for="subtitle in words"
-            :key="subtitle.id"
+
+          <draggable
+            class="list-group topper"
+            tag="ul"
+            v-model="words"
+            v-bind="dragOptions"
+            @change="onChange"
+            :move="onMove"
+            @start="isDragging = true"
+            @end="isDragging = false"
           >
-            <p>
-              {{ subtitle.start }} - {{ subtitle.end }} |
-              <strong>{{ subtitle.text }}</strong>
-            </p>
-          </div>
+            <transition-group type="transition" :name="'flip-list'">
+              <li
+                class="list-group-item"
+                v-for="element in words"
+                :key="element.id"
+              >
+                <!-- <span class="badge">{{ element.id }}</span> -->
+                {{ element.start }} - {{ element.end }} |
+                <strong>{{ element.text }}</strong>
+                <Button
+                  style="display: block;float: right; background: red !important; padding: 3px !important; padding-right:8px !important; padding-left:8px !important; margin-top:-3px !important; "
+                  buttonText="Delete"
+                  @click.native="deleteItem(element)"
+                ></Button>
+              </li>
+            </transition-group>
+          </draggable>
         </b-col>
       </b-row>
     </b-container>
@@ -86,6 +105,8 @@
 import VuePlyr from "vue-plyr";
 import { mapGetters, mapActions } from "vuex";
 import Button from "@/components/Button.vue";
+import draggable from "vuedraggable";
+const vttToJson = require("vtt-to-json");
 
 const sampleWords = [];
 const formatSeconds = (seconds) =>
@@ -114,9 +135,88 @@ export default {
       words: sampleWords,
       text: "",
       vtt: "",
+      editable: true,
+      isDragging: false,
+      delayedDragging: false,
     };
   },
   methods: {
+    orderList() {
+      this.list = this.list.sort((one, two) => {
+        return one.order - two.order;
+      });
+    },
+    onMove({ relatedContext, draggedContext }) {
+      const relatedElement = relatedContext.element;
+      const draggedElement = draggedContext.element;
+      return (
+        (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+      );
+    },
+    deleteItem(itemIndex) {
+      console.log(itemIndex);
+      this.sampleWords = this.removeItemOnce(sampleWords, itemIndex);
+      this.words = this.removeItemOnce(sampleWords, itemIndex);
+      this.reorderArray(sampleWords);
+      const vttData = vttGenerator(this.words);
+      console.log(vttData);
+      this.setCaptionData({
+        id: this.$route.params.id,
+        data: vttData,
+      });
+    },
+    removeItemOnce(arr, value) {
+      var i = 0;
+      while (i < arr.length) {
+        if (arr[i] === value) {
+          arr.splice(i, 1);
+        } else {
+          ++i;
+        }
+      }
+      return arr;
+    },
+    onChange(data) {
+      this.words = this.array_move(data.moved, sampleWords);
+      this.reorderArray(this.words);
+      this.sampleWords = this.array_move(data.moved, sampleWords);
+      this.reorderArray(sampleWords);
+      const vttData = vttGenerator(this.words);
+      console.log(vttData);
+      this.setCaptionData({
+        id: this.$route.params.id,
+        data: vttData,
+      });
+      this.getCaptionData(this.$route.params.id);
+    },
+    array_move(event, originalArray) {
+      const movedItem = originalArray.find(
+        (item, index) => index === event.oldIndex
+      );
+      const remainingItems = originalArray.filter(
+        (item, index) => index !== event.oldIndex
+      );
+
+      const reorderedItems = [
+        ...remainingItems.slice(0, event.newIndex),
+        movedItem,
+        ...remainingItems.slice(event.newIndex),
+      ];
+
+      return reorderedItems;
+    },
+    reorderArray(arr) {
+      arr.forEach((item, n) => {
+        let sampleObj = {
+          id: n + 1,
+          start: item.start,
+          end: item.end,
+          text: item.text,
+          fixed: false,
+        };
+        arr[n] = sampleObj;
+      });
+    },
     ...mapActions([
       "fetchVideo",
       "setCaptionData",
@@ -126,7 +226,6 @@ export default {
 
     createVideo() {
       this.fetchVideo(this.$route.params.id);
-
       setTimeout(() => {
         let video = document.getElementById("video");
         this.value.push(Math.floor(video.duration));
@@ -134,11 +233,24 @@ export default {
         this.getCaptionData(this.$route.params.id);
 
         setTimeout(() => {
-         
           this.vtt =
             "https://i346784core.venus.fhict.nl/StaticFiles/" +
             this.$route.params.id +
             ".vtt";
+          vttToJson(this.captionData.caption).then((result) => {
+             result.forEach((item, n) => {
+               
+              let sampleObj = {
+                id: n + 1,
+                start: item.start.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/.$/,""),
+                end: item.end.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/.$/,""),
+                text: item.part,
+                fixed: false,
+              };
+              sampleWords.push(sampleObj);          
+      });
+      this.words = sampleWords;
+          });
         }, 1000);
       }, 1000);
     },
@@ -171,32 +283,36 @@ export default {
       );
       a.dispatchEvent(e);
     },
-    vttToJson(data) {
-      var lines = data.split("\n");
-      var buffer = {
-        text: "",
-      };
+    // vttToJson(data) {
+    //   var lines = data.split("\n");
+    //   var buffer = {
+    //     text: "",
+    //   };
 
-      lines.forEach(function(line) {
-        if (!buffer.id) buffer.id = line;
-        else if (!buffer.start) {
-          var range = line.split(" --> ");
-          const firstOne = range[0].replace(".000", "");
-          const secondOne = range[1].replace(".000", "");
-          buffer.start = firstOne
-            .split(":")
-            .reverse()
-            .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
-          buffer.end = secondOne
-            .split(":")
-            .reverse()
-            .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
-        } else if (line !== "") {
-          buffer.text.push(line);
-        }
-      });
-      sampleWords.push(buffer);
-    },
+    //   lines.forEach(function(line) {
+    //     console.log(line)
+    //     if (!buffer.id) buffer.id = line;
+
+    //     else if (!buffer.start) {
+    //        buffer.fixed = false;
+    //       buffer.text = line.text
+    //       var range = line.split(" --> ");
+    //       const firstOne = range[0].replace(".000", "");
+    //       const secondOne = range[1].replace(".000", "");
+    //       buffer.start = firstOne
+    //         .split(":")
+    //         .reverse()
+    //         .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
+    //       buffer.end = secondOne
+    //         .split(":")
+    //         .reverse()
+    //         .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
+    //     }
+    //   });
+
+    //   sampleWords.push(buffer);
+    //   this.words = sampleWords;
+    // },
 
     addSubtitle() {
       if (this.max != "" && this.min != "" && this.text != "") {
@@ -206,6 +322,7 @@ export default {
           start: this.min,
           end: this.max,
           text: this.text,
+          fixed: false,
         });
         const vttData = vttGenerator(sampleWords);
         console.log(vttData);
@@ -213,10 +330,26 @@ export default {
           id: this.$route.params.id,
           data: vttData,
         });
+        this.words = sampleWords;
+        this.getCaptionData(this.$route.params.id);
       }
     },
   },
   computed: {
+    dragOptions() {
+      return {
+        animation: 0,
+        group: "description",
+        disabled: !this.editable,
+        ghostClass: "ghost",
+      };
+    },
+    listString() {
+      return JSON.stringify(this.list, null, 2);
+    },
+    list2String() {
+      return JSON.stringify(this.list2, null, 2);
+    },
     ...mapGetters(["video", "captionData"]),
   },
   created() {
@@ -227,11 +360,46 @@ export default {
     $route(to, from) {
       this.createVideo();
     },
+    isDragging(newValue) {
+      if (newValue) {
+        this.delayedDragging = true;
+        return;
+      }
+      this.$nextTick(() => {
+        this.delayedDragging = false;
+      });
+    },
   },
   components: {
     // VueRangeSlider
     VuePlyr,
     Button,
+    draggable,
   },
 };
 </script>
+
+<style>
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+.list-group {
+  min-height: 20px;
+}
+.list-group-item {
+  cursor: move;
+}
+.list-group-item i {
+  cursor: pointer;
+}
+.topper {
+  margin-top: 30px;
+}
+</style>

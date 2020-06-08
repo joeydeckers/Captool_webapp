@@ -164,6 +164,7 @@ export default {
         id: this.$route.params.id,
         data: vttData,
       });
+       this.getCaptionData(this.$route.params.id);
     },
     removeItemOnce(arr, value) {
       var i = 0;

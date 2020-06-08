@@ -22,7 +22,7 @@ Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 
-axios.defaults.baseURL = 'https://localhost:44320/'; //'https://i346784core.venus.fhict.nl/';
+axios.defaults.baseURL =  'https://i346784core.venus.fhict.nl/'; //'https://localhost:44320/';
 
 Vue.config.productionTip = false
 

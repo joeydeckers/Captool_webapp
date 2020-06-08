@@ -106,6 +106,7 @@ import VuePlyr from "vue-plyr";
 import { mapGetters, mapActions } from "vuex";
 import Button from "@/components/Button.vue";
 import draggable from "vuedraggable";
+const vttToJson = require("vtt-to-json");
 
 const sampleWords = [];
 const formatSeconds = (seconds) =>
@@ -176,7 +177,6 @@ export default {
       return arr;
     },
     onChange(data) {
-
       this.words = this.array_move(data.moved, sampleWords);
       this.reorderArray(this.words);
       this.sampleWords = this.array_move(data.moved, sampleWords);
@@ -187,6 +187,7 @@ export default {
         id: this.$route.params.id,
         data: vttData,
       });
+      this.getCaptionData(this.$route.params.id);
     },
     array_move(event, originalArray) {
       const movedItem = originalArray.find(
@@ -225,7 +226,6 @@ export default {
 
     createVideo() {
       this.fetchVideo(this.$route.params.id);
-  console.log(this.$store.getters.getAccessToken)
       setTimeout(() => {
         let video = document.getElementById("video");
         this.value.push(Math.floor(video.duration));
@@ -237,6 +237,20 @@ export default {
             "https://i346784core.venus.fhict.nl/StaticFiles/" +
             this.$route.params.id +
             ".vtt";
+          vttToJson(this.captionData.caption).then((result) => {
+             result.forEach((item, n) => {
+               
+              let sampleObj = {
+                id: n + 1,
+                start: item.start.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/.$/,""),
+                end: item.end.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/.$/,""),
+                text: item.part,
+                fixed: false,
+              };
+              sampleWords.push(sampleObj);          
+      });
+      this.words = sampleWords;
+          });
         }, 1000);
       }, 1000);
     },
@@ -269,32 +283,36 @@ export default {
       );
       a.dispatchEvent(e);
     },
-    vttToJson(data) {
-      var lines = data.split("\n");
-      var buffer = {
-        text: "",
-      };
+    // vttToJson(data) {
+    //   var lines = data.split("\n");
+    //   var buffer = {
+    //     text: "",
+    //   };
 
-      lines.forEach(function(line) {
-        if (!buffer.id) buffer.id = line;
-        else if (!buffer.start) {
-          var range = line.split(" --> ");
-          const firstOne = range[0].replace(".000", "");
-          const secondOne = range[1].replace(".000", "");
-          buffer.start = firstOne
-            .split(":")
-            .reverse()
-            .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
-          buffer.end = secondOne
-            .split(":")
-            .reverse()
-            .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
-        } else if (line !== "") {
-          buffer.text.push(line);
-        }
-      });
-      sampleWords.push(buffer);
-    },
+    //   lines.forEach(function(line) {
+    //     console.log(line)
+    //     if (!buffer.id) buffer.id = line;
+
+    //     else if (!buffer.start) {
+    //        buffer.fixed = false;
+    //       buffer.text = line.text
+    //       var range = line.split(" --> ");
+    //       const firstOne = range[0].replace(".000", "");
+    //       const secondOne = range[1].replace(".000", "");
+    //       buffer.start = firstOne
+    //         .split(":")
+    //         .reverse()
+    //         .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
+    //       buffer.end = secondOne
+    //         .split(":")
+    //         .reverse()
+    //         .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
+    //     }
+    //   });
+
+    //   sampleWords.push(buffer);
+    //   this.words = sampleWords;
+    // },
 
     addSubtitle() {
       if (this.max != "" && this.min != "" && this.text != "") {
@@ -313,6 +331,7 @@ export default {
           data: vttData,
         });
         this.words = sampleWords;
+        this.getCaptionData(this.$route.params.id);
       }
     },
   },

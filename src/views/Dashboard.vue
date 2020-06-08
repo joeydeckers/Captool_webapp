@@ -5,16 +5,18 @@
       <b-col lg="3" v-for="video in this.$store.getters.allVideos.playlist" :key="video.mediaid">
         <div class="video-item">
           <img :src="video.image" alt srcset />
-          <p>
+          <div><p style=" white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;">
             <strong>{{ video.title }}</strong>
-          </p>
-          <p>: {{ getTime(video.duration) }}</p>
-          <router-link :to="{name: 'CaptionItem', params: {id: video.mediaid}}">
+         : {{ getTime(video.duration) }}</p>
+          <router-link  :to="{name: 'CaptionItem', params: {id: video.mediaid}}">
             <eye-icon size="1.5x" class="icon"></eye-icon>
           </router-link>
           <router-link :to="{name: 'EditCaptionItem', params: {id: video.mediaid}}">
             <edit-icon size="1.5x" class="icon"></edit-icon>
-          </router-link>
+          </router-link></div>
         </div>
       </b-col>
     </b-row>

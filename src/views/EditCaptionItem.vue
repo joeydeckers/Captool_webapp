@@ -96,6 +96,9 @@
         </b-col>
       </b-row>
     </b-container>
+     <b-toast id="example-toast" title="BootstrapVue" class="b-toaster-top-right" static no-auto-hide>
+      Hello, world! This is a toast message.
+    </b-toast>
   </div>
 </template>
 
@@ -141,6 +144,13 @@ export default {
     };
   },
   methods: {
+    makeToast(variant = null, titleToast, bodyToast) {
+        this.$bvToast.toast(bodyToast, {
+          title: titleToast,
+          variant: variant,
+          solid: true
+        })
+      },
     orderList() {
       this.list = this.list.sort((one, two) => {
         return one.order - two.order;
@@ -154,6 +164,7 @@ export default {
       );
     },
     deleteItem(itemIndex) {
+      this.makeToast('danger', 'Caption verwijderd', 'De caption is succesvol verwijderd');
       console.log(itemIndex);
       this.sampleWords = this.removeItemOnce(sampleWords, itemIndex);
       this.words = this.removeItemOnce(sampleWords, itemIndex);
@@ -258,6 +269,7 @@ export default {
 
     createVTT() {
       const vttData = vttGenerator(sampleWords);
+      this.makeToast('success', 'VTT aangemaakt', 'Jouw VTT-bestand is successvol aangemaakt.');
       console.log(vttData);
       const blob = new Blob([vttData], { type: "text/plain" });
       const e = document.createEvent("MouseEvents"),
@@ -317,6 +329,7 @@ export default {
 
     addSubtitle() {
       if (this.max != "" && this.min != "" && this.text != "") {
+        this.makeToast('success', 'Caption aangemaakt', 'Jouw caption is successvol aangemaakt.');
         const id = sampleWords.length + 1;
         sampleWords.push({
           id: id,

@@ -45,7 +45,7 @@
 
 <script>
 import Button from "@/components/Button.vue";
-import { required, minLength } from "vuelidate";
+import { required } from "vuelidate";
 
 export default {
   components: {
@@ -53,6 +53,7 @@ export default {
   },
   data() {
     return {
+      name:"",
       email: "",
       password: ""
     };
@@ -68,7 +69,7 @@ export default {
   validations: {
     name: {
       required,
-      minLength: minLength(4)
+      //minLength: minLength(4)
     },
   }
 };

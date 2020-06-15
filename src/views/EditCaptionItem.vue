@@ -54,6 +54,8 @@
             maxlength="30"
             placeholder="Jouw caption"
           ></b-input>
+          <div class="error" v-if="!$v.caption.required">Dit veld is verplicht</div>
+
           <Button
             style="margin-top: 20px; margin-right:20px;"
             buttonText="Toevoegen"
@@ -105,6 +107,7 @@
 <script>
 // import "vue-range-component/dist/vue-range-slider.css";
 // import VueRangeSlider from "vue-range-component";
+import { required } from "vuelidate/lib/validators";
 import VuePlyr from "vue-plyr";
 import { mapGetters, mapActions } from "vuex";
 import Button from "@/components/Button.vue";
@@ -142,6 +145,11 @@ export default {
       isDragging: false,
       delayedDragging: false,
     };
+  },
+  validations: {
+    caption: {
+      required
+    }
   },
   methods: {
     makeToast(variant = null, titleToast, bodyToast) {

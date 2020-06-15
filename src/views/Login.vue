@@ -15,7 +15,8 @@
               <div class="input-holder">
                 <font-awesome-icon icon="envelope" />
                 <input type="email" placeholder="Jouw email" v-model="email" data-type="email" />
-                <div class="error" v-if="!$v.email.required">Field is required</div>
+                <div class="error" v-if="!$v.email.required">Dit veld is verplicht</div>
+                <div class="error" v-if="!$v.email.email">Vul een geldig email adres in</div>
               </div>
             </b-form-group>
 
@@ -28,6 +29,11 @@
                   v-model="password"
                   data-type="password"
                 />
+                <div class="error" v-if="!$v.password.required">Dit veld is verplicht</div>
+                <div
+                  class="error"
+                  v-if="!$v.password.minLength"
+                >Het wachtwoord moet minimaal {{$v.password.$params.minLength.min}} karakters bevatten</div>
               </div>
             </b-form-group>
 
@@ -41,7 +47,7 @@
 
 <script>
 import Button from "@/components/Button.vue";
-import { required} from "vuelidate";
+import { required, email, minLength } from "vuelidate/lib/validators";
 
 export default {
   components: {
@@ -55,16 +61,38 @@ export default {
   },
   methods: {
     login() {
-      this.$store.dispatch("login", {
-        email: this.email,
-        password: this.password
-      });
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+      } else {
+        this.$store.dispatch("login", {
+          email: this.email,
+          password: this.password
+        });
+        this.submitStatus = "PENDING";
+        setTimeout(() => {
+          this.submitStatus = "OK";
+        }, 500);
+      }
     }
   },
   validations: {
     email: {
       required,
+      email
     },
+    password: {
+      required,
+      minLength: minLength(6)
+    }
   }
 };
 </script>
+
+<style scoped>
+  .input-holder {
+    background-color: #fff;
+  }
+  .error {
+    margin-left: 35px;
+  }
+</style>

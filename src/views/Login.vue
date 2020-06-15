@@ -15,11 +15,7 @@
               <div class="input-holder">
                 <font-awesome-icon icon="envelope" />
                 <input type="email" placeholder="Jouw email" v-model="email" data-type="email" />
-                <div class="error" v-if="!$v.name.required">Field is required</div>
-                <div
-                  class="error"
-                  v-if="!$v.name.minLength"
-                >Name must have at least {{$v.name.$params.minLength.min}} letters.</div>
+                <div class="error" v-if="!$v.email.required">Field is required</div>
               </div>
             </b-form-group>
 
@@ -45,7 +41,7 @@
 
 <script>
 import Button from "@/components/Button.vue";
-import { required } from "vuelidate";
+import { required} from "vuelidate";
 
 export default {
   components: {
@@ -53,7 +49,6 @@ export default {
   },
   data() {
     return {
-      name:"",
       email: "",
       password: ""
     };
@@ -67,9 +62,8 @@ export default {
     }
   },
   validations: {
-    name: {
+    email: {
       required,
-      //minLength: minLength(4)
     },
   }
 };

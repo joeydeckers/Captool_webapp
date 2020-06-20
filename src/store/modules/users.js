@@ -13,17 +13,25 @@ const getters = {
 
 const actions = {
     login({commit}, user){
-        axios({
-            method: 'post',
-            url: 'api/Users/Login',
-            headers: {
+        // axios({
+        //     method: 'post',
+        //     url: 'api/Users/Login',
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "Accept": "application/json",
+        //     },
+        //     data:{
+        //         email: user.email,
+        //         password: user.password
+        //     }
+        // })
+        axios.post('api/Users/Login', {
+            headers:{
                 "Content-Type": "application/json",
                 "Accept": "application/json",
             },
-            data:{
-                email: user.email,
-                password: user.password
-            }
+            email: user.email,
+            password: user.password,
         })
         .then((response)=>{
             commit('SET_USER_TOKEN', response.data.token);

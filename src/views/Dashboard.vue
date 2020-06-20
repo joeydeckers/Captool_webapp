@@ -9,7 +9,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 300px;">
-            <strong>{{ video.title }}</strong>
+            <strong class="title">{{ video.title }}</strong>
          : {{ getTime(video.duration) }}</p>
           <router-link  :to="{name: 'CaptionItem', params: {id: video.mediaid}}">
             <eye-icon size="1.5x" class="icon"></eye-icon>

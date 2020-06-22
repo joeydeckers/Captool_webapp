@@ -34,7 +34,7 @@
               </div>
             </b-form-group>
 
-            <Button type="submit" buttonText="Inloggen" />
+            <Button type="submit" buttonText="Inloggen" :buttonLoading='this.buttonLoading'/>
           </b-form>
         </b-col>
       </b-row>
@@ -54,18 +54,21 @@ export default {
     return {
       email: "",
       password: "",
-      submitStatus: ""
+      submitStatus: "",
+      buttonLoading: false
     };
   },
   methods: {
     login() {
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
+       
       } else {
-        this.$store.dispatch("login", {
-          email: this.email,
-          password: this.password
-        });
+         this.buttonLoading = true;
+          this.$store.dispatch("login", {
+            email: this.email,
+            password: this.password
+          });
         this.submitStatus = "PENDING";
         setTimeout(() => {
           this.submitStatus = "OK";

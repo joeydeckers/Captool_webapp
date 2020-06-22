@@ -59,7 +59,7 @@ const actions = {
             router.push("/");
         })
         .catch((error) => {
-            alert(error);
+            console.log(error);
         })
     },
     logout({commit}){

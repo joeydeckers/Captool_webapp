@@ -11,8 +11,8 @@ describe('Add caption', () => {
     it('Can add caption', () => {
       cy.visit('http://localhost:8080/edit/caption/rpJSvjW5');
       cy.wait(1500);
-      cy.get('#__BVID__21').clear().type('2');
-      cy.get('#__BVID__23').clear().type('test caption');
+      cy.get('#range-2').first().click({release:false}).trigger('mousemove', 1);
+      cy.get('#__BVID__26').last().type('test caption');
       cy.get('#button').first().click();
     });
   })

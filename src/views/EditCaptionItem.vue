@@ -35,16 +35,19 @@
         <b-col lg="6" style="margin-top: 45px">
           <b-row>
             <b-col lg="6">
-              <p>Begin</p>
-              <b-input
+              <p style="margin-top: 0;margin-bottom: 0;font-weight: 600;">Begin</p>
+              <b-form-input id="range-2"  v-model="min" type="range" min="0" :max="maxValue" step="0.05"></b-form-input>
+              <div class="mb-2">Waarde: {{ min }}</div>
+              <!-- <b-input
                 v-model="min"
                 type="number"
                 placeholder="Begin"
-              ></b-input>
+              ></b-input> -->
             </b-col>
             <b-col lg="6">
-              <p>Einde</p>
-              <b-input v-model="max" type="number" placeholder="max"></b-input>
+              <p style="margin-top: 0;margin-bottom: 0;font-weight: 600;">Einde</p>
+              <b-form-input id="range-2"  v-model="max" type="range" min="0" :max="maxValue" step="0.05"></b-form-input>
+<div class="mb-2">Waarde: {{ max }}</div>
             </b-col>
           </b-row>
 
@@ -138,8 +141,9 @@ export default {
   data() {
     return {
       value: [0],
-      max: 0,
-      min: 1,
+      max: 1,
+      maxValue: 0,
+      min: 0,
       words: sampleWords,
       text: "",
       vtt: "",
@@ -250,7 +254,7 @@ export default {
       setTimeout(() => {
         let video = document.getElementById("video");
         this.value.push(Math.floor(video.duration));
-        this.max = Math.floor(video.duration);
+        this.maxValue = Math.floor(video.duration);
         this.getCaptionData(this.$route.params.id);
 
         setTimeout(() => {

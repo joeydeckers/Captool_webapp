@@ -88,6 +88,7 @@
                 {{ element.start }} - {{ element.end }} |
                 <strong>{{ element.text }}</strong>
                 <Button
+                  class="delete-btn"
                   style="display: block;float: right; background: red !important; padding: 3px !important; padding-right:8px !important; padding-left:8px !important; margin-top:-3px !important; "
                   buttonText="Delete"
                   @click.native="deleteItem(element)"

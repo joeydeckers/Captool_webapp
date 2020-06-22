@@ -41,9 +41,10 @@
                   v-model="playlist.input"
                   :placeholder="user.playlist"
                   v-if="playlist.change"
+                  data-type="playlist"
                 ></b-form-input>
                 <span v-else class="font-weight-bold">{{ user.playlist }}</span>
-                <b-button class="btn" @click="playlist.change = !playlist.change" v-if="!playlist.change">Edit</b-button>
+                <b-button class="btn" data-type="edit-btn-playlist" @click="playlist.change = !playlist.change" v-if="!playlist.change">Edit</b-button>
                 <b-button class="btn"
                   @click="playlist.change = !playlist.change, user.playlist = playlist.input"
                   v-if="playlist.change"

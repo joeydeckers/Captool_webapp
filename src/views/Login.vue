@@ -11,16 +11,18 @@
               <strong>Inloggen</strong>
             </h3>
             <p>Vul jouw gegevens in om in te loggen.</p>
+            <p class="error" v-if="submitStatus == 'ERROR'">Dit veld is verplicht</p>
+            <p class="error" v-if="!$v.email.email">Vul een geldig email adres in</p>
             <b-form-group id="input-group-1">
               <div class="input-holder">
                 <font-awesome-icon icon="envelope" />
                 <input type="email" placeholder="Jouw email" v-model="email" data-type="email" />
               </div>
             </b-form-group>
-            <div class="error" v-if="!$v.email.required">Dit veld is verplicht</div>
-            <div class="error" v-if="!$v.email.email">Vul een geldig email adres in</div>
 
             <b-form-group id="input-group-2">
+              <p class="error" v-if="submitStatus == 'ERROR'">Dit veld is verplicht</p>
+              <p class="error" v-if="!$v.password.minLength" >Het wachtwoord moet minimaal {{$v.password.$params.minLength.min}} karakters bevatten</p>
               <div class="input-holder">
                 <font-awesome-icon icon="lock" />
                 <input
@@ -29,11 +31,6 @@
                   v-model="password"
                   data-type="password"
                 />
-                <div class="error" v-if="!$v.password.required">Dit veld is verplicht</div>
-                <div
-                  class="error"
-                  v-if="!$v.password.minLength"
-                >Het wachtwoord moet minimaal {{$v.password.$params.minLength.min}} karakters bevatten</div>
               </div>
             </b-form-group>
 
@@ -56,7 +53,8 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      submitStatus: ""
     };
   },
   methods: {
@@ -93,6 +91,6 @@ export default {
   background-color: #fff;
 }
 .error {
-  margin-left: 35px;
+  color: red;
 }
 </style>

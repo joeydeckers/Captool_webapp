@@ -7,27 +7,16 @@
             <h2>{{ video.title }}</h2>
             <!-- src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" -->
 
-            <vue-plyr>
-              <video
-                id="video"
-                crossorigin
-                playsinline
-                :src="video.sources[1].file"
-              >
-                <track
-                  default
-                  kind="captions"
-                  label="Current"
-                  :src="vtt"
-                  srclang="en"
-                />
+            <vue-plyr >
+              <video id="video" crossorigin playsinline captionsenabled :src="video.sources[1].file" controls data-plyr-config='{ "captions":{ active: true } }'>
+                <track default kind="captions" label="Current" :src="vtt" srclang="en" />
                 <!-- <track
           default
           kind="captions"
           label="English"
           src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
           srclang="en"
-        > -->
+                >-->
               </video>
             </vue-plyr>
           </div>
@@ -36,18 +25,32 @@
           <b-row>
             <b-col lg="6">
               <p style="margin-top: 0;margin-bottom: 0;font-weight: 600;">Begin</p>
-              <b-form-input id="range-2"  v-model="min" type="range" min="0" :max="maxValue" step="0.05"></b-form-input>
+              <b-form-input
+                id="range-2"
+                v-model="min"
+                type="range"
+                min="0"
+                :max="maxValue"
+                step="0.05"
+              ></b-form-input>
               <div class="mb-2">Waarde: {{ min }}</div>
               <!-- <b-input
                 v-model="min"
                 type="number"
                 placeholder="Begin"
-              ></b-input> -->
+              ></b-input>-->
             </b-col>
             <b-col lg="6">
               <p style="margin-top: 0;margin-bottom: 0;font-weight: 600;">Einde</p>
-              <b-form-input id="range-2"  v-model="max" type="range" min="0" :max="maxValue" step="0.05"></b-form-input>
-<div class="mb-2">Waarde: {{ max }}</div>
+              <b-form-input
+                id="range-2"
+                v-model="max"
+                type="range"
+                min="0"
+                :max="maxValue"
+                step="0.05"
+              ></b-form-input>
+              <div class="mb-2">Waarde: {{ max }}</div>
             </b-col>
           </b-row>
 
@@ -64,11 +67,7 @@
             buttonText="Toevoegen"
             @click.native="addSubtitle()"
           ></Button>
-          <Button
-            style="margin-top: 20px"
-            buttonText="Exporteren"
-            @click.native="createVTT()"
-          ></Button>
+          <Button style="margin-top: 20px" buttonText="Exporteren" @click.native="createVTT()"></Button>
           <!-- <Button><font-awesome-icon icon="plus" style="color:#fff;"/></Button> -->
 
           <draggable
@@ -82,11 +81,7 @@
             @end="isDragging = false"
           >
             <transition-group type="transition" :name="'flip-list'">
-              <li
-                class="list-group-item"
-                v-for="element in words"
-                :key="element.id"
-              >
+              <li class="list-group-item" v-for="element in words" :key="element.id">
                 <!-- <span class="badge">{{ element.id }}</span> -->
                 {{ element.start }} - {{ element.end }} |
                 <strong>{{ element.text }}</strong>
@@ -102,9 +97,13 @@
         </b-col>
       </b-row>
     </b-container>
-     <b-toast id="example-toast" title="BootstrapVue" class="b-toaster-top-right" static no-auto-hide>
-      
-    </b-toast>
+    <b-toast
+      id="example-toast"
+      title="BootstrapVue"
+      class="b-toaster-top-right"
+      static
+      no-auto-hide
+    ></b-toast>
   </div>
 </template>
 
@@ -120,12 +119,12 @@ const vttToJson = require("vtt-to-json");
 //const vttToJson = require("vtt-json")
 
 const sampleWords = [];
-const formatSeconds = (seconds) =>
+const formatSeconds = seconds =>
   new Date(seconds.toFixed(3) * 1000).toISOString().substr(11, 12);
 
-const vttGenerator = (vttJSON) => {
+const vttGenerator = vttJSON => {
   let vttOut = "";
-  vttJSON.forEach((v) => {
+  vttJSON.forEach(v => {
     vttOut += `\n${formatSeconds(parseFloat(v.start)).replace(
       ".",
       "."
@@ -149,7 +148,7 @@ export default {
       vtt: "",
       editable: true,
       isDragging: false,
-      delayedDragging: false,
+      delayedDragging: false
     };
   },
   validations: {
@@ -159,12 +158,12 @@ export default {
   },
   methods: {
     makeToast(variant = null, titleToast, bodyToast) {
-        this.$bvToast.toast(bodyToast, {
-          title: titleToast,
-          variant: variant,
-          solid: true
-        })
-      },
+      this.$bvToast.toast(bodyToast, {
+        title: titleToast,
+        variant: variant,
+        solid: true
+      });
+    },
     orderList() {
       this.list = this.list.sort((one, two) => {
         return one.order - two.order;
@@ -178,18 +177,22 @@ export default {
       );
     },
     deleteItem(itemIndex) {
-      this.makeToast('danger', 'Caption verwijderd', 'De caption is succesvol verwijderd');
- 
+      this.makeToast(
+        "danger",
+        "Caption verwijderen",
+        "De caption is succesvol verwijderd"
+      );
+
       this.sampleWords = this.removeItemOnce(sampleWords, itemIndex);
       this.words = this.removeItemOnce(sampleWords, itemIndex);
       this.reorderArray(sampleWords);
       const vttData = vttGenerator(this.words);
- 
+
       this.setCaptionData({
         id: this.$route.params.id,
-        data: vttData,
+        data: vttData
       });
-       this.getCaptionData(this.$route.params.id);
+      this.getCaptionData(this.$route.params.id);
     },
     removeItemOnce(arr, value) {
       var i = 0;
@@ -210,7 +213,7 @@ export default {
       const vttData = vttGenerator(this.words);
       this.setCaptionData({
         id: this.$route.params.id,
-        data: vttData,
+        data: vttData
       });
       this.getCaptionData(this.$route.params.id);
     },
@@ -225,7 +228,7 @@ export default {
       const reorderedItems = [
         ...remainingItems.slice(0, event.newIndex),
         movedItem,
-        ...remainingItems.slice(event.newIndex),
+        ...remainingItems.slice(event.newIndex)
       ];
 
       return reorderedItems;
@@ -237,7 +240,7 @@ export default {
           start: item.start,
           end: item.end,
           text: item.text,
-          fixed: false,
+          fixed: false
         };
         arr[n] = sampleObj;
       });
@@ -246,7 +249,7 @@ export default {
       "fetchVideo",
       "setCaptionData",
       "getCaptionData",
-      "getCaption",
+      "getCaption"
     ]),
 
     createVideo() {
@@ -262,28 +265,31 @@ export default {
             "https://i346784core.venus.fhict.nl/StaticFiles/" +
             this.$route.params.id +
             ".vtt";
-            
-          vttToJson(this.captionData.caption).then((result) => {
-            console.log(result)
+
+          vttToJson(this.captionData.caption).then(result => {
             const newResult = [];
-             result.forEach((item) => {
-            if(item.part != ''){
-                newResult.push(item)
-            }
-             });
-             newResult.forEach((item, n) => {
-let sampleObj = {
+            result.forEach(item => {
+              if (item.part != "") {
+                newResult.push(item);
+              }
+            });
+            newResult.forEach((item, n) => {
+              let sampleObj = {
                 id: n + 1,
-                start: item.start.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/.$/,""),
-                end: item.end.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/.$/,""),
+                start: item.start
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                  .replace(/.$/, ""),
+                end: item.end
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                  .replace(/.$/, ""),
                 text: item.part,
-                fixed: false,
+                fixed: false
               };
-              sampleWords.push(sampleObj);   
-           
-                     
-      });
-      this.words = sampleWords;
+              sampleWords.push(sampleObj);
+            });
+            this.words = sampleWords;
           });
         }, 1000);
       }, 1000);
@@ -291,54 +297,76 @@ let sampleObj = {
 
     createVTT() {
       const vttData = vttGenerator(sampleWords);
-      this.makeToast('success', 'VTT aangemaakt', 'Jouw VTT-bestand is successvol aangemaakt.');
-   
-      const blob = new Blob([vttData], { type: "text/plain" });
-      const e = document.createEvent("MouseEvents"),
-        a = document.createElement("a");
-      a.download = this.$route.params.id + ".vtt";
-      a.href = window.URL.createObjectURL(blob);
-      a.dataset.downloadurl = ["text/vtt", a.download, a.href].join(":");
-      e.initEvent(
-        "click",
-        true,
-        false,
-        window,
-        0,
-        0,
-        0,
-        0,
-        0,
-        false,
-        false,
-        false,
-        false,
-        0,
-        null
-      );
-      a.dispatchEvent(e);
+      if (vttData != "") {
+        this.makeToast(
+          "success",
+          "VTT exporteren",
+          "Jouw VTT-bestand is successvol aangemaakt."
+        );
+
+        const blob = new Blob([vttData], { type: "text/plain" });
+        const e = document.createEvent("MouseEvents"),
+          a = document.createElement("a");
+        a.download = this.$route.params.id + ".vtt";
+        a.href = window.URL.createObjectURL(blob);
+        a.dataset.downloadurl = ["text/vtt", a.download, a.href].join(":");
+        e.initEvent(
+          "click",
+          true,
+          false,
+          window,
+          0,
+          0,
+          0,
+          0,
+          0,
+          false,
+          false,
+          false,
+          false,
+          0,
+          null
+        );
+        a.dispatchEvent(e);
+      } else {
+        this.makeToast(
+          "danger",
+          "VTT exporteren",
+          "Voeg eerst een caption toe voordat je het kan exporteren."
+        );
+      }
     },
     addSubtitle() {
       if (this.max != "" && this.min != "" && this.text != "") {
-        this.makeToast('success', 'Caption aangemaakt', 'Jouw caption is successvol aangemaakt.');
+        this.makeToast(
+          "success",
+          "Caption aanmaken",
+          "Jouw caption is successvol aangemaakt."
+        );
         const id = sampleWords.length + 1;
         sampleWords.push({
           id: id,
           start: this.min,
           end: this.max,
           text: this.text,
-          fixed: false,
+          fixed: false
         });
         const vttData = vttGenerator(sampleWords);
 
         this.setCaptionData({
           id: this.$route.params.id,
-          data: vttData,
+          data: vttData
         });
         this.words = sampleWords;
         this.getCaptionData(this.$route.params.id);
+      } else {
+        this.makeToast(
+          "danger",
+          "Caption aanmaken",
+          "Voer eerst een caption in."
+        );
       }
-    },
+    }
   },
   computed: {
     dragOptions() {
@@ -346,7 +374,7 @@ let sampleObj = {
         animation: 0,
         group: "description",
         disabled: !this.editable,
-        ghostClass: "ghost",
+        ghostClass: "ghost"
       };
     },
     listString() {
@@ -355,7 +383,7 @@ let sampleObj = {
     list2String() {
       return JSON.stringify(this.list2, null, 2);
     },
-    ...mapGetters(["video", "captionData"]),
+    ...mapGetters(["video", "captionData"])
   },
   created() {
     this.createVideo();
@@ -373,14 +401,14 @@ let sampleObj = {
       this.$nextTick(() => {
         this.delayedDragging = false;
       });
-    },
+    }
   },
   components: {
     // VueRangeSlider
     VuePlyr,
     Button,
-    draggable,
-  },
+    draggable
+  }
 };
 </script>
 

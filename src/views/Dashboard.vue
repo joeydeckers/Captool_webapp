@@ -58,7 +58,21 @@ export default {
         );
       }, 500);
     }
-  }
+  },
+  // watch: {
+  //   /* eslint-disable no-unused-vars */
+  //   $route(to, from) {
+  //         if (localStorage.capToolToken) {
+  //     this.$store.dispatch("fetchUser", this.$store.getters.getAccessToken);
+  //     setTimeout(() => {
+  //       this.$store.dispatch(
+  //         "fetchVideos",
+  //         this.$store.getters.getUser.playlist
+  //       );
+  //     }, 500);
+  //   }
+  //   },
+  // },
 };
 </script>
 

@@ -25,14 +25,7 @@
           <b-row>
             <b-col lg="6">
               <p style="margin-top: 0;margin-bottom: 0;font-weight: 600;">Begin</p>
-              <b-form-input
-                id="range-2"
-                v-model="min"
-                type="range"
-                min="0"
-                :max="maxValue"
-                step="0.05"
-              ></b-form-input>
+              <b-form-input id="range-2"  v-model="min" type="range" min="0" :max="maxValue" step="0.01"></b-form-input>
               <div class="mb-2">Waarde: {{ min }}</div>
               <!-- <b-input
                 v-model="min"
@@ -42,15 +35,8 @@
             </b-col>
             <b-col lg="6">
               <p style="margin-top: 0;margin-bottom: 0;font-weight: 600;">Einde</p>
-              <b-form-input
-                id="range-2"
-                v-model="max"
-                type="range"
-                min="0"
-                :max="maxValue"
-                step="0.05"
-              ></b-form-input>
-              <div class="mb-2">Waarde: {{ max }}</div>
+              <b-form-input id="range-2"  v-model="max" type="range" min="0" :max="maxValue" step="0.01"></b-form-input>
+<div class="mb-2">Waarde: {{ max }}</div>
             </b-col>
           </b-row>
 

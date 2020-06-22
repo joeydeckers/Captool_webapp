@@ -9,10 +9,10 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-            <b-nav-item v-if="!this.$store.getters.getAccessToken" href="/login">Login</b-nav-item>
-            <b-nav-item v-if="!this.$store.getters.getAccessToken" href="/register">Sign up</b-nav-item>
-            <b-nav-item v-if="this.$store.getters.getAccessToken" href="/">Dashboard</b-nav-item>
-            <b-nav-item v-if="this.$store.getters.getAccessToken" href="/profile">Profile</b-nav-item>
+            <b-nav-item v-if="!this.$store.getters.getAccessToken" href="#"> <router-link to="/login">Login</router-link> </b-nav-item>
+            <b-nav-item v-if="!this.$store.getters.getAccessToken" href="#"><router-link to="/register">Sign up</router-link></b-nav-item>
+            <b-nav-item v-if="this.$store.getters.getAccessToken" href="#"><router-link to="/">Dashboard</router-link></b-nav-item>
+            <b-nav-item v-if="this.$store.getters.getAccessToken" href="#"><router-link to="/profile">Profile</router-link></b-nav-item>
             <b-nav-item v-if="this.$store.getters.getAccessToken" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>
         </b-collapse>
@@ -30,6 +30,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+    a{
+        color: #000;
+        &:hover{
+            text-decoration: none;
+        }
+    }
 </style>

@@ -48,7 +48,7 @@
               </div>
             </b-form-group>
 
-            <Button type="submit" buttonText="Registeren" />
+            <Button type="submit" :buttonLoading='this.buttonLoading' buttonText="Registeren" />
           </b-form>
         </b-col>
       </b-row>
@@ -69,7 +69,8 @@ export default {
       email: "",
       name: "",
       password: "",
-      submitStatus: ""
+      submitStatus: "",
+      buttonLoading: false
     };
   },
   methods: {
@@ -77,6 +78,7 @@ export default {
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
       } else {
+        this.buttonLoading = true;
         this.$store.dispatch("register", {
           email: this.email,
           name: this.name,

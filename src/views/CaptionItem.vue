@@ -41,7 +41,8 @@ export default {
       value: [0],
       max: 0,
       min: 1,
-      vtt: ""
+      vtt: "",
+      vid: this.$route.params.id
     };
   },
   methods: {
@@ -85,7 +86,7 @@ export default {
       setTimeout(() => {
         this.$store.dispatch(
           "fetchVideos",
-          this.$store.getters.getUser.playlist
+          this.$store.getters.getUser.playlist,
         );
       }, 500);
     }

@@ -16,7 +16,7 @@
           <h3 style="margin-left:5px;">Andere video's</h3>
           <b-row v-for="video in this.$store.getters.allVideos.playlist" :key="video.mediaid">
             <router-link :to="{name: 'CaptionItem', params: {id: video.mediaid}}">
-              <div class="video-item" style="margin-left: 20px;margin-right: 20px;">
+              <div  v-if="video.mediaid != vid" class="video-item" style="margin-left: 20px;margin-right: 20px;">
                 <img :src="video.image" alt srcset />
                 <p>
                   <strong>{{ video.title }}</strong>

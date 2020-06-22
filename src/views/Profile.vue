@@ -70,6 +70,9 @@
         </b-card>
       </b-col>
     </b-row>
+    <b-toast id="example-toast" title="BootstrapVue" class="b-toaster-top-right" static no-auto-hide>
+      
+    </b-toast>
   </b-container>
 </template>
 
@@ -97,6 +100,13 @@ export default {
     };
   },
   methods: {
+    makeToast(variant = null, titleToast, bodyToast) {
+        this.$bvToast.toast(bodyToast, {
+          title: titleToast,
+          variant: variant,
+          solid: true
+        })
+      },
     getUser() {
       return {
         name: this.name.input === "" ? this.user.name : this.name.input,
@@ -107,6 +117,7 @@ export default {
     },
     saveSettings() {
       this.$store.dispatch("updateUser", {access_token: this.$store.getters.getAccessToken, user: this.getUser()});
+       this.makeToast('success', 'Profiel bijgewerkt', 'Jouw profiel is successvol bijgewerkt.');
     },
   },
   created() {

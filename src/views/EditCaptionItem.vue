@@ -100,7 +100,7 @@
       </b-row>
     </b-container>
      <b-toast id="example-toast" title="BootstrapVue" class="b-toaster-top-right" static no-auto-hide>
-      Hello, world! This is a toast message.
+      
     </b-toast>
   </div>
 </template>

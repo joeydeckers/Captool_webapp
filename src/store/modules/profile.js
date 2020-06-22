@@ -45,6 +45,8 @@ const actions = {
             }
         })
             .then((response) => {
+                commit('SET_USER_TOKEN', response.data.token);
+                localStorage.setItem('capToolToken', response.data.token);
                 commit('SET_USER', response.data);
             })
             .catch((error) => {

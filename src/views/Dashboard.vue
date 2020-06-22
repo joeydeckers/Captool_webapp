@@ -14,9 +14,9 @@
           <router-link  :to="{name: 'CaptionItem', params: {id: video.mediaid}}">
             <eye-icon size="1.5x" class="icon"></eye-icon>
           </router-link>
-          <router-link :to="{name: 'EditCaptionItem', params: {id: video.mediaid}}">
+          <a :href="`/edit/caption/${video.mediaid}`">
             <edit-icon size="1.5x" class="icon"></edit-icon>
-          </router-link></div>
+          </a></div>
         </div>
       </b-col>
     </b-row>

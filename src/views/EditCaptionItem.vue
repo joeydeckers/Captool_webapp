@@ -114,6 +114,7 @@ import { mapGetters, mapActions } from "vuex";
 import Button from "@/components/Button.vue";
 import draggable from "vuedraggable";
 const vttToJson = require("vtt-to-json");
+//const vttToJson = require("vtt-json")
 
 const sampleWords = [];
 const formatSeconds = (seconds) =>
@@ -121,14 +122,14 @@ const formatSeconds = (seconds) =>
 
 const vttGenerator = (vttJSON) => {
   let vttOut = "";
-  vttJSON.forEach((v, i) => {
-    vttOut += `${i + 1}\n${formatSeconds(parseFloat(v.start)).replace(
+  vttJSON.forEach((v) => {
+    vttOut += `\n${formatSeconds(parseFloat(v.start)).replace(
       ".",
       "."
     )} --> ${formatSeconds(parseFloat(v.end)).replace(
       ".",
       "."
-    )}\n${v.text.trim()}\n\n`;
+    )}\n${v.text.trim()}`;
   });
   return vttOut;
 };
@@ -174,12 +175,12 @@ export default {
     },
     deleteItem(itemIndex) {
       this.makeToast('danger', 'Caption verwijderd', 'De caption is succesvol verwijderd');
-      console.log(itemIndex);
+ 
       this.sampleWords = this.removeItemOnce(sampleWords, itemIndex);
       this.words = this.removeItemOnce(sampleWords, itemIndex);
       this.reorderArray(sampleWords);
       const vttData = vttGenerator(this.words);
-      console.log(vttData);
+ 
       this.setCaptionData({
         id: this.$route.params.id,
         data: vttData,
@@ -203,7 +204,6 @@ export default {
       this.sampleWords = this.array_move(data.moved, sampleWords);
       this.reorderArray(sampleWords);
       const vttData = vttGenerator(this.words);
-      console.log(vttData);
       this.setCaptionData({
         id: this.$route.params.id,
         data: vttData,
@@ -258,17 +258,26 @@ export default {
             "https://i346784core.venus.fhict.nl/StaticFiles/" +
             this.$route.params.id +
             ".vtt";
+            
           vttToJson(this.captionData.caption).then((result) => {
-             result.forEach((item, n) => {
-               
-              let sampleObj = {
+            console.log(result)
+            const newResult = [];
+             result.forEach((item) => {
+            if(item.part != ''){
+                newResult.push(item)
+            }
+             });
+             newResult.forEach((item, n) => {
+let sampleObj = {
                 id: n + 1,
                 start: item.start.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/.$/,""),
                 end: item.end.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/.$/,""),
                 text: item.part,
                 fixed: false,
               };
-              sampleWords.push(sampleObj);          
+              sampleWords.push(sampleObj);   
+           
+                     
       });
       this.words = sampleWords;
           });
@@ -279,7 +288,7 @@ export default {
     createVTT() {
       const vttData = vttGenerator(sampleWords);
       this.makeToast('success', 'VTT aangemaakt', 'Jouw VTT-bestand is successvol aangemaakt.');
-      console.log(vttData);
+   
       const blob = new Blob([vttData], { type: "text/plain" });
       const e = document.createEvent("MouseEvents"),
         a = document.createElement("a");
@@ -305,37 +314,6 @@ export default {
       );
       a.dispatchEvent(e);
     },
-    // vttToJson(data) {
-    //   var lines = data.split("\n");
-    //   var buffer = {
-    //     text: "",
-    //   };
-
-    //   lines.forEach(function(line) {
-    //     console.log(line)
-    //     if (!buffer.id) buffer.id = line;
-
-    //     else if (!buffer.start) {
-    //        buffer.fixed = false;
-    //       buffer.text = line.text
-    //       var range = line.split(" --> ");
-    //       const firstOne = range[0].replace(".000", "");
-    //       const secondOne = range[1].replace(".000", "");
-    //       buffer.start = firstOne
-    //         .split(":")
-    //         .reverse()
-    //         .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
-    //       buffer.end = secondOne
-    //         .split(":")
-    //         .reverse()
-    //         .reduce((prev, curr, i) => prev + curr * Math.pow(60, i), 0);
-    //     }
-    //   });
-
-    //   sampleWords.push(buffer);
-    //   this.words = sampleWords;
-    // },
-
     addSubtitle() {
       if (this.max != "" && this.min != "" && this.text != "") {
         this.makeToast('success', 'Caption aangemaakt', 'Jouw caption is successvol aangemaakt.');
@@ -348,7 +326,7 @@ export default {
           fixed: false,
         });
         const vttData = vttGenerator(sampleWords);
-        console.log(vttData);
+
         this.setCaptionData({
           id: this.$route.params.id,
           data: vttData,

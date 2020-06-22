@@ -15,10 +15,11 @@
               <div class="input-holder">
                 <font-awesome-icon icon="envelope" />
                 <input data-type="email" type="email" placeholder="Jouw email" v-model="email" />
-                <div class="error" v-if="!$v.email.required">Dit veld is verplicht</div>
-                <div class="error" v-if="!$v.email.email">Vul een geldig email adres in</div>
               </div>
+            <div class="error" v-if="!$v.email.required">Dit veld is verplicht</div>
+            <div class="error" v-if="!$v.email.email">Vul een geldig email adres in</div>
             </b-form-group>
+
             <b-form-group id="input-group-1">
               <div class="input-holder">
                 <font-awesome-icon icon="user" />
@@ -109,7 +110,7 @@ export default {
 .input-holder {
   background-color: #fff;
 }
-.error {
+/* .error {
   margin-left: 35px;
-}
+} */
 </style>
